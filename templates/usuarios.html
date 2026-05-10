@@ -7,21 +7,34 @@
 
 <body>
 
-    <h1>Módulo Usuarios</h1>
+    <h1>Bienvenido {{ nombre }}</h1>
 
-    <form method="POST">
+    <a href="/logout">
+        Cerrar Sesión
+    </a>
 
-        <input type="text" name="nombre" placeholder="Nombre">
-        <br><br>
+    <hr>
 
-        <input type="email" name="correo" placeholder="Correo">
-        <br><br>
+    <h2>Usuarios Registrados</h2>
 
-        <button type="submit">
-            Guardar
-        </button>
+    <table border="1">
 
-    </form>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+        </tr>
+
+        {% for usuario in usuarios %}
+
+        <tr>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.correo }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
 
 </body>
+
 </html>

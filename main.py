@@ -1,6 +1,15 @@
 from flask import Flask, render_template
 
+# IMPORTAR MODULO USUARIOS
+from modulos.usuarios import usuarios_bp
+
 app = Flask(__name__)
+
+# CLAVE DE SESION
+app.secret_key = "123456"
+
+# REGISTRAR MODULO
+app.register_blueprint(usuarios_bp)
 
 @app.route("/")
 def inicio():
