@@ -67,4 +67,8 @@ def admin():
 def auditoria():
     return render_template("auditoria.html")
 
+@app.route("/gestiondisp")
+def gestiondisp():
+    return render_template("gestiondisp.html")
+
 app.run(debug=True)
