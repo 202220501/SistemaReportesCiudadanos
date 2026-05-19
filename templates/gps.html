@@ -1,14 +1,129 @@
+
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-    <title>Modulo</title>
+    <meta charset="UTF-8">
+    <title>Módulo GPS - TESE</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; padding: 0;}
+        .header { background-color: #111827; color: white; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h3 { margin-top: 0; color: #333; font-size: 20px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .row { display: flex; gap: 15px; }
+        .col { flex: 1; }
+        button { width: 100%; padding: 12px; background-color: #198754; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s;}
+        button:hover { background-color: #157347; }
+        
+        /* Contenedor del mapa */
+        #mapa { height: 450px; width: 100%; border-radius: 10px; z-index: 1; border: 1px solid #ddd;}
+    </style>
 </head>
-
 <body>
 
-    <h1>Modulo funcionando</h1>
+    <div class="header">
+        📍 Sistema GPS y Mapa
+    </div>
 
+    <div class="container">
+        <div class="card">
+            <h3>Registrar Ubicación</h3>
+            <div class="input-group">
+                <label>Título del reporte</label>
+                <input type="text" id="titulo" placeholder="Ej. Falla eléctrica en Ecatepec">
+            </div>
+            
+            <div class="row">
+                <div class="col input-group">
+                    <label>Latitud</label>
+                    <input type="number" id="lat" value="19.5103" step="any">
+                </div>
+                <div class="col input-group">
+                    <label>Longitud</label>
+                    <input type="number" id="lng" value="-99.0415" step="any">
+                </div>
+            </div>
+
+            <button onclick="guardarUbicacion()">📌 Guardar Ubicación Actual</button>
+        </div>
+
+        <div class="card" style="padding: 10px;">
+            <div id="mapa"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 1. Inicializar el mapa centrado en el TESE por defecto
+        let mapa = L.map('mapa').setView([19.5103, -99.0415], 15);
+        
+        // 2. Cargar el diseño del mapa (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mapa);
+
+        // 3. Crear el "globito" rojo (marcador) y hacerlo arrastrable (draggable)
+        let marcador = L.marker([19.5103, -99.0415], {draggable: true}).addTo(mapa);
+
+        // Referencias a las cajitas de texto
+        const inputLat = document.getElementById('lat');
+        const inputLng = document.getElementById('lng');
+
+        // ---------------------------------------------------------
+        // MAGIA 1: Si escribes un número, el marcador se mueve
+        // ---------------------------------------------------------
+        function actualizarDesdeInputs() {
+            let lat = parseFloat(inputLat.value);
+            let lng = parseFloat(inputLng.value);
+            if(!isNaN(lat) && !isNaN(lng)) {
+                let nuevaPos = new L.LatLng(lat, lng);
+                marcador.setLatLng(nuevaPos);
+                mapa.panTo(nuevaPos); // Centra el mapa en el nuevo punto
+            }
+        }
+        inputLat.addEventListener('input', actualizarDesdeInputs);
+        inputLng.addEventListener('input', actualizarDesdeInputs);
+
+        // ---------------------------------------------------------
+        // MAGIA 2: Si arrastras el marcador con el mouse, los números cambian solos
+        // ---------------------------------------------------------
+        marcador.on('dragend', function(event) {
+            let posicion = marcador.getLatLng();
+            inputLat.value = posicion.lat.toFixed(6); // Lo deja en 6 decimales
+            inputLng.value = posicion.lng.toFixed(6);
+        });
+
+        // ---------------------------------------------------------
+        // GUARDAR EN FIREBASE (Se conecta a tu app_escritorio.py)
+        // ---------------------------------------------------------
+        async function guardarUbicacion() {
+            const titulo = document.getElementById('titulo').value;
+            const lat = document.getElementById('lat').value;
+            const lng = document.getElementById('lng').value;
+
+            if(!titulo || !lat || !lng) {
+                alert("Por favor llena el título y asegúrate de tener las coordenadas.");
+                return;
+            }
+
+            try {
+                // Se envía por POST a la ruta que armamos en Flask
+                const response = await fetch('/guardar_gps', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ titulo: titulo, lat: lat, lng: lng })
+                });
+                
+                const resultado = await response.json();
+                alert(resultado.mensaje);
+            } catch (error) {
+                alert("Error de conexión al servidor. ¿Está corriendo Python?");
+            }
+        }
+    </script>
 </body>
-
 </html>
