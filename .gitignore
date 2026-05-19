@@ -221,4 +221,4 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
->>>>>>> ff633c012e579982c3e1d3a00438d1d8937a464f
+__pycache__/
