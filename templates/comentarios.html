@@ -1,14 +1,62 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-    <title>Modulo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDRC - Módulo de Comentarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #eef2f7; } /* Fondo general institucional [cite: 38] */
+        .header { 
+            background-color: #0f172a; /* Color azul administrativo [cite: 32] */
+            color: white; 
+            padding: 20px; 
+            margin-bottom: 30px;
+        }
+        .card { border-radius: 15px; border: none; } /* Cards modernas [cite: 86] */
+    </style>
 </head>
-
 <body>
 
-    <h1>Modulo funcionando</h1>
+<div class="header text-center">
+    <h1>💬 Módulo de Comentarios</h1>
+    <p>Sistema Digital de Reportes Ciudadanos</p>
+</div>
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-lg p-4">
+                <h4 class="mb-3">Nuevo Comentario</h4>
+                <form action="/guardar_comentario" method="POST">
+                    <input type="hidden" name="reporte_id" value="reporte_general">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" name="nombre" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tu Comentario</label>
+                        <textarea name="comentario" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Enviar Comentario</button> </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-lg p-4">
+                <h4>Historial de Comentarios</h4>
+                <hr>
+                {% for c in comentarios %}
+                <div class="p-3 mb-2 border-bottom" style="background-color: #f8f9fa; border-radius: 10px;">
+                    <strong style="color: #0f172a;">{{ c.nombre }}</strong>
+                    <p class="mb-1 text-muted">{{ c.comentario }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
