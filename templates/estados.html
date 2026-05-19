@@ -1,13 +1,432 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
-    <title>Modulo</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Estados de Reportes</title>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- ICONOS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        body{
+            background-color: #eef2f7;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* HEADER */
+
+        .header{
+            background-color: #0f172a;
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 35px;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .header h1{
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .header p{
+            color: #cbd5e1;
+            margin-top: 8px;
+        }
+
+        /* CARDS */
+
+        .card{
+            border: none;
+            border-radius: 18px;
+        }
+
+        /* TITULOS */
+
+        .titulo-seccion{
+            color: #0f172a;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* ESTADOS */
+
+        .estado{
+            padding: 7px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .pendiente{
+            background-color: #fd7e14;
+        }
+
+        .proceso{
+            background-color: #0d6efd;
+        }
+
+        .resuelto{
+            background-color: #198754;
+        }
+
+        .cancelado{
+            background-color: #dc3545;
+        }
+
+        /* TABLA */
+
+        .table thead{
+            background-color: #0f172a;
+            color: white;
+        }
+
+        .table th{
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table td{
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* BOTONES */
+
+        .btn-ver{
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .btn-ver:hover{
+            background-color: #0b5ed7;
+            color: white;
+        }
+
+        .btn-actualizar{
+            background-color: #198754;
+            color: white;
+        }
+
+        .btn-actualizar:hover{
+            background-color: #157347;
+            color: white;
+        }
+
+        /* FILTROS */
+
+        .filtro-card{
+            background-color: white;
+            border-radius: 18px;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-    <h1>Modulo funcionando</h1>
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="container">
+
+            <h1>
+                <i class="bi bi-clipboard-check-fill"></i>
+                Estados de Reportes
+            </h1>
+
+            <p>
+                Monitoreo y seguimiento del estado actual de los reportes ciudadanos.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CONTENIDO -->
+
+    <div class="container">
+
+        <!-- CARDS RESUMEN -->
+
+        <div class="row mb-4">
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow-lg p-4">
+
+                    <h2 class="text-warning">25</h2>
+
+                    <p>
+                        Reportes Pendientes
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow-lg p-4">
+
+                    <h2 class="text-primary">18</h2>
+
+                    <p>
+                        En Proceso
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow-lg p-4">
+
+                    <h2 class="text-success">42</h2>
+
+                    <p>
+                        Reportes Resueltos
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow-lg p-4">
+
+                    <h2 class="text-danger">4</h2>
+
+                    <p>
+                        Reportes Cancelados
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FILTROS -->
+
+        <div class="card shadow-lg p-4 mb-4 filtro-card">
+
+            <h4 class="titulo-seccion">
+                <i class="bi bi-funnel-fill"></i>
+                Filtros de Búsqueda
+            </h4>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Buscar Reporte
+                    </label>
+
+                    <input 
+                        type="text"
+                        class="form-control"
+                        placeholder="Buscar por título..."
+                    >
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Estado
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>Todos</option>
+                        <option>Pendiente</option>
+                        <option>En proceso</option>
+                        <option>Resuelto</option>
+                        <option>Cancelado</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Categoría
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>Todas</option>
+                        <option>Agua</option>
+                        <option>Luz</option>
+                        <option>Calles</option>
+                        <option>Basura</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TABLA -->
+
+        <div class="card shadow-lg p-4">
+
+            <h4 class="titulo-seccion">
+                <i class="bi bi-table"></i>
+                Estado Actual de Reportes
+            </h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Reporte</th>
+                            <th>Categoría</th>
+                            <th>Ciudadano</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Prioridad</th>
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>1</td>
+                            <td>Fuga de agua</td>
+                            <td>Agua</td>
+                            <td>Juan Pérez</td>
+                            <td>14/05/2026</td>
+
+                            <td>
+
+                                <span class="estado pendiente">
+                                    Pendiente
+                                </span>
+
+                            </td>
+
+                            <td>Alta</td>
+
+                            <td>
+
+                                <button class="btn btn-ver btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                    Ver
+                                </button>
+
+                                <button class="btn btn-actualizar btn-sm">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    Actualizar
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>2</td>
+                            <td>Bache en avenida</td>
+                            <td>Calles</td>
+                            <td>María López</td>
+                            <td>13/05/2026</td>
+
+                            <td>
+
+                                <span class="estado proceso">
+                                    En proceso
+                                </span>
+
+                            </td>
+
+                            <td>Media</td>
+
+                            <td>
+
+                                <button class="btn btn-ver btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                    Ver
+                                </button>
+
+                                <button class="btn btn-actualizar btn-sm">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    Actualizar
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>3</td>
+                            <td>Lámpara dañada</td>
+                            <td>Luz</td>
+                            <td>Carlos Ruiz</td>
+                            <td>10/05/2026</td>
+
+                            <td>
+
+                                <span class="estado resuelto">
+                                    Resuelto
+                                </span>
+
+                            </td>
+
+                            <td>Baja</td>
+
+                            <td>
+
+                                <button class="btn btn-ver btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                    Ver
+                                </button>
+
+                                <button class="btn btn-actualizar btn-sm">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    Actualizar
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 

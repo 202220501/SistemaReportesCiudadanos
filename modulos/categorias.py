@@ -5,8 +5,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from firebase_admin import firestore
-from modulos.categorias import categorias_bp
-import os
+
 # =====================================================
 # BLUEPRINT
 # =====================================================
