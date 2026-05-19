@@ -59,6 +59,7 @@ def auditoria():
 
     return render_template(
         'auditoria.html',
+
         eventos=lista_eventos
     )
 
