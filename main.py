@@ -1,4 +1,7 @@
 from flask import Flask, render_template
+from firebase_config import db
+
+
 
 # IMPORTAR MODULO USUARIOS
 from modulos.usuarios import usuarios_bp
