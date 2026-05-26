@@ -1,18 +1,31 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from firebase_config import db
 
+# =====================================
+# IMPORTAR MODULOS
+# =====================================
 
-
-# IMPORTAR MODULO USUARIOS
 from modulos.usuarios import usuarios_bp
+from modulos.imagenes import (imagenes_bp, procesar_imagenes)
 
 app = Flask(__name__)
 
+# =====================================
 # CLAVE DE SESION
+# =====================================
+
 app.secret_key = "123456"
 
-# REGISTRAR MODULO
+# =====================================
+# REGISTRAR MODULOS
+# =====================================
+
 app.register_blueprint(usuarios_bp)
+app.register_blueprint(imagenes_bp)
+
+# =====================================
+# RUTAS
+# =====================================
 
 @app.route("/")
 def inicio():
@@ -34,9 +47,21 @@ def categorias():
 def gps():
     return render_template("gps.html")
 
-@app.route("/imagenes")
+# =====================================
+# IMAGENES
+# =====================================
+
+@app.route(
+    "/imagenes",
+    methods=["GET", "POST"]
+)
 def imagenes():
-    return render_template("imagenes.html")
+
+    if request.method == "POST":
+        return procesar_imagenes()
+    return render_template(
+        "imagenes.html"
+    )
 
 @app.route("/estados")
 def estados():
