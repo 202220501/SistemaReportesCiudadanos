@@ -71,7 +71,7 @@ def panel_admin():
 
     except Exception as e:
 
-        print(e)
+        print("MIS REPORTES DE FIREBASE:", lista_reportes)
 
     return render_template(
 
