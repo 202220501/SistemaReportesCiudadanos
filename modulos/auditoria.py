@@ -1,12 +1,19 @@
-
 from flask import Blueprint, render_template
 from firebase_admin import firestore
 from datetime import datetime
+
+# ==========================================
+# BLUEPRINT
+# ==========================================
 
 auditoria_bp = Blueprint(
     'auditoria',
     __name__
 )
+
+# ==========================================
+# FIRESTORE
+# ==========================================
 
 db = firestore.client()
 
@@ -24,8 +31,11 @@ def registrar_evento(
     datos = {
 
         "usuario": usuario,
+
         "accion": accion,
+
         "modulo": modulo,
+
         "descripcion": descripcion,
 
         "fecha": datetime.now().strftime(
@@ -59,7 +69,5 @@ def auditoria():
 
     return render_template(
         'auditoria.html',
-
         eventos=lista_eventos
     )
-
