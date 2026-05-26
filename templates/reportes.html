@@ -102,72 +102,136 @@
 
                 <div class="row">
 
+                    <!-- TITULO -->
+
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
 
-                            Nombre
+                            Título
 
                         </label>
 
                         <input
                             type="text"
-                            name="nombre"
+                            name="titulo"
                             class="form-control"
                             required
                         >
 
                     </div>
 
+                    <!-- CATEGORIA -->
+
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
 
-                            Correo
+                            Categoría ID
 
                         </label>
 
                         <input
-                            type="email"
-                            name="correo"
+                            type="text"
+                            name="categoria_id"
                             class="form-control"
                             required
                         >
 
                     </div>
 
+                    <!-- USUARIO -->
+
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
 
-                            Tipo de Reporte
+                            Usuario ID
 
                         </label>
 
                         <input
                             type="text"
-                            name="tipo"
+                            name="usuario_id"
                             class="form-control"
                             required
                         >
 
                     </div>
 
+                    <!-- DIRECCION -->
+
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
 
-                            Ubicación
+                            Dirección
 
                         </label>
 
                         <input
                             type="text"
-                            name="ubicacion"
+                            name="direccion"
                             class="form-control"
                         >
 
                     </div>
+
+                    <!-- LATITUD -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+
+                            Latitud
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="latitud"
+                            class="form-control"
+                        >
+
+                    </div>
+
+                    <!-- LONGITUD -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+
+                            Longitud
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="longitud"
+                            class="form-control"
+                        >
+
+                    </div>
+
+                    <!-- IMAGEN -->
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label">
+
+                            Imagen URL
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="imagen"
+                            class="form-control"
+                        >
+
+                    </div>
+
+                    <!-- DESCRIPCION -->
 
                     <div class="col-md-12 mb-3">
 
@@ -185,6 +249,8 @@
                         ></textarea>
 
                     </div>
+
+                    <!-- PRIORIDAD -->
 
                     <div class="col-md-6 mb-3">
 
@@ -249,15 +315,15 @@
                         <tr>
 
                             <th>
-                                Nombre
+                                Título
                             </th>
 
                             <th>
-                                Correo
+                                Categoría
                             </th>
 
                             <th>
-                                Tipo
+                                Usuario
                             </th>
 
                             <th>
@@ -265,7 +331,15 @@
                             </th>
 
                             <th>
-                                Ubicación
+                                Dirección
+                            </th>
+
+                            <th>
+                                Latitud
+                            </th>
+
+                            <th>
+                                Longitud
                             </th>
 
                             <th>
@@ -291,15 +365,15 @@
                         <tr>
 
                             <td>
-                                {{ reporte.nombre }}
+                                {{ reporte.titulo }}
                             </td>
 
                             <td>
-                                {{ reporte.correo }}
+                                {{ reporte.categoria_id }}
                             </td>
 
                             <td>
-                                {{ reporte.tipo_reporte }}
+                                {{ reporte.usuario_id }}
                             </td>
 
                             <td>
@@ -307,7 +381,15 @@
                             </td>
 
                             <td>
-                                {{ reporte.ubicacion }}
+                                {{ reporte.direccion }}
+                            </td>
+
+                            <td>
+                                {{ reporte.latitud }}
+                            </td>
+
+                            <td>
+                                {{ reporte.longitud }}
                             </td>
 
                             <td>
@@ -315,11 +397,11 @@
                             </td>
 
                             <td>
-                                {{ reporte.estado }}
+                                {{ reporte.estado_id }}
                             </td>
 
                             <td>
-                                {{ reporte.fecha }}
+                                {{ reporte.fecha_reporte }}
                             </td>
 
                         </tr>
