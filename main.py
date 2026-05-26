@@ -1,21 +1,40 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from firebase_config import db
 
-# =====================================================
+# =====================================
 # IMPORTAR MODULOS
-# =====================================================
+# =====================================
 
 from modulos.usuarios import usuarios_bp
 from modulos.categorias import categorias_bp
+from modulos.imagenes import (
+    imagenes_bp,
+    procesar_imagenes
+)
 
+# =====================================
+# APP
+# =====================================
 
 app = Flask(__name__)
 
+# =====================================
+# CLAVE DE SESION
+# =====================================
 
 app.secret_key = "123456"
 
+# =====================================
+# REGISTRAR MODULOS
+# =====================================
 
 app.register_blueprint(usuarios_bp)
 app.register_blueprint(categorias_bp)
+app.register_blueprint(imagenes_bp)
+
+# =====================================
+# RUTAS
+# =====================================
 
 @app.route("/")
 def inicio():
@@ -29,6 +48,13 @@ def usuarios():
 def reportes():
     return render_template("reportes.html")
 
+# =====================================
+# CATEGORIAS
+# =====================================
+
+# ESTA RUTA SE ELIMINA
+# PORQUE categorias.py YA LA CONTROLA
+
 # @app.route("/categorias")
 # def categorias():
 #     return render_template("categorias.html")
@@ -37,9 +63,22 @@ def reportes():
 def gps():
     return render_template("gps.html")
 
-@app.route("/imagenes")
+# =====================================
+# IMAGENES
+# =====================================
+
+@app.route(
+    "/imagenes",
+    methods=["GET", "POST"]
+)
 def imagenes():
-    return render_template("imagenes.html")
+
+    if request.method == "POST":
+        return procesar_imagenes()
+
+    return render_template(
+        "imagenes.html"
+    )
 
 @app.route("/estados")
 def estados():
@@ -77,6 +116,9 @@ def auditoria():
 def gestiondisp():
     return render_template("gestiondisp.html")
 
+# =====================================
+# EJECUTAR
+# =====================================
 
 if __name__ == "__main__":
 

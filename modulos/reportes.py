@@ -13,7 +13,7 @@ from datetime import datetime
 
 reportes_bp = Blueprint(
     'reportes',
-    _name_
+    __name__
 )
 
 # =====================================================
@@ -64,16 +64,18 @@ def enviar_reporte():
 
     try:
 
-        nombre = request.form['nombre']
-        correo = request.form['correo']
-        tipo = request.form['tipo']
+        titulo = request.form['titulo']
         descripcion = request.form['descripcion']
-        ubicacion = request.form['ubicacion']
+        categoria_id = request.form['categoria_id']
+        usuario_id = request.form['usuario_id']
         prioridad = request.form['prioridad']
+        direccion = request.form['direccion']
+        latitud = request.form['latitud']
+        longitud = request.form['longitud']
+        imagen = request.form['imagen']
 
         if (
-            nombre == "" or
-            correo == "" or
+            titulo.strip() == "" or
             descripcion.strip() == ""
         ):
 
@@ -88,16 +90,19 @@ def enviar_reporte():
 
         reporte = {
 
-            "nombre": nombre,
-            "correo": correo,
-            "tipo_reporte": tipo,
+            "titulo": titulo,
             "descripcion": descripcion,
-            "ubicacion": ubicacion,
-            "prioridad": prioridad,
-            "estado": "Pendiente",
-            "fecha": datetime.now().strftime(
+            "categoria_id": categoria_id,
+            "usuario_id": usuario_id,
+            "estado_id": "1",
+            "latitud": latitud,
+            "longitud": longitud,
+            "direccion": direccion,
+            "fecha_reporte": datetime.now().strftime(
                 "%d/%m/%Y %H:%M:%S"
-            )
+            ),
+            "imagen": imagen,
+            "prioridad": prioridad
 
         }
 

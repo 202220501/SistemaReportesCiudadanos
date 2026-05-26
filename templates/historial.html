@@ -11,7 +11,7 @@
     >
 
     <title>
-        Historial de Estados
+        Historial de Reportes
     </title>
 
     <!-- BOOTSTRAP -->
@@ -21,28 +21,42 @@
         rel="stylesheet"
     >
 
+    <!-- ESTILOS -->
+
     <style>
 
         body{
-            background: #eef2f7;
+            background:#eef2f7;
+            font-family:Arial, Helvetica, sans-serif;
         }
 
         .header{
-            background: #0f172a;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
+            background:#0f172a;
+            color:white;
+            padding:25px;
+            text-align:center;
+            margin-bottom:40px;
         }
 
         .titulo{
-            font-size: 35px;
-            font-weight: bold;
+            font-size:35px;
+            font-weight:bold;
+        }
+
+        .subtitulo{
+            color:#cbd5e1;
         }
 
         .card{
-            border: none;
-            border-radius: 15px;
+            border:none;
+            border-radius:15px;
+        }
+
+        .btn-guardar{
+            width:100%;
+            height:50px;
+            font-size:18px;
+            font-weight:bold;
         }
 
     </style>
@@ -57,7 +71,13 @@
 
         <div class="titulo">
 
-            📋 Historial de Estados
+            📑 Historial de Reportes
+
+        </div>
+
+        <div class="subtitulo">
+
+            Seguimiento y trazabilidad del sistema
 
         </div>
 
@@ -70,11 +90,11 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
 
-                {% for categoria, mensaje in messages %}
+                {% for categoria,mensaje in messages %}
 
-                    <div class="alert alert-{{ categoria }}">
+                    <div class="alert alert-{{categoria}}">
 
-                        {{ mensaje }}
+                        {{mensaje}}
 
                     </div>
 
@@ -87,14 +107,22 @@
 
         <div class="card shadow-lg p-4 mb-5">
 
+            <h3 class="mb-4">
+
+                Registrar Cambio
+
+            </h3>
+
             <form
-                action="/guardar_estado"
+                action="/guardar_historial"
                 method="POST"
             >
 
                 <div class="row">
 
-                    <div class="col-md-6 mb-3">
+                    <!-- REPORTE -->
+
+                    <div class="col-md-4 mb-3">
 
                         <label class="form-label">
 
@@ -104,88 +132,140 @@
 
                         <input
                             type="text"
-                            name="id_reporte"
+                            name="reporte_id"
                             class="form-control"
                             required
                         >
 
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <!-- USUARIO -->
+
+                    <div class="col-md-4 mb-3">
 
                         <label class="form-label">
 
-                            Estado
-
-                        </label>
-
-                        <select
-                            name="estado"
-                            class="form-control"
-                            required
-                        >
-
-                            <option value="">
-                                Selecciona
-                            </option>
-
-                            <option>
-                                Pendiente
-                            </option>
-
-                            <option>
-                                En proceso
-                            </option>
-
-                            <option>
-                                Resuelto
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-
-                        <label class="form-label">
-
-                            Usuario
+                            ID Usuario
 
                         </label>
 
                         <input
                             type="text"
-                            name="usuario"
+                            name="usuario_id"
                             class="form-control"
                             required
                         >
 
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <!-- ESTADO -->
+
+                    <div class="col-md-4 mb-3">
 
                         <label class="form-label">
 
-                            Comentario
+                            ID Estado
 
                         </label>
 
                         <input
                             type="text"
-                            name="comentario"
+                            name="estado_id"
                             class="form-control"
+                            required
                         >
 
                     </div>
 
                 </div>
 
+                <!-- EVENTO -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Tipo de Evento
+
+                    </label>
+
+                    <select
+                        name="tipo_evento"
+                        class="form-control"
+                    >
+
+                        <option value="creacion">
+
+                            Creación
+
+                        </option>
+
+                        <option value="actualizacion">
+
+                            Actualización
+
+                        </option>
+
+                        <option value="seguimiento">
+
+                            Seguimiento
+
+                        </option>
+
+                        <option value="cancelacion">
+
+                            Cancelación
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- DESCRIPCION -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Descripción del Cambio
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="descripcion_cambio"
+                        class="form-control"
+                    >
+
+                </div>
+
+                <!-- COMENTARIO -->
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Comentario
+
+                    </label>
+
+                    <textarea
+                        name="comentario"
+                        class="form-control"
+                        rows="4"
+                    ></textarea>
+
+                </div>
+
+                <!-- BOTON -->
+
                 <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="btn btn-primary btn-guardar"
                 >
 
-                    Guardar Estado
+                    💾 Guardar Historial
 
                 </button>
 
@@ -199,20 +279,22 @@
 
             <h3 class="mb-4">
 
-                📑 Historial
+                📋 Historial Registrado
 
             </h3>
 
             <div class="table-responsive">
 
-                <table class="table table-bordered">
+                <table
+                    class="table table-bordered table-hover"
+                >
 
                     <thead class="table-dark">
 
                         <tr>
 
                             <th>
-                                Estado
+                                Reporte
                             </th>
 
                             <th>
@@ -220,11 +302,19 @@
                             </th>
 
                             <th>
-                                Comentario
+                                Estado
                             </th>
 
                             <th>
-                                Fecha
+                                Evento
+                            </th>
+
+                            <th>
+                                Descripción
+                            </th>
+
+                            <th>
+                                Comentario
                             </th>
 
                         </tr>
@@ -238,19 +328,39 @@
                         <tr>
 
                             <td>
-                                {{ item.estado }}
+
+                                {{item.reporte_id}}
+
                             </td>
 
                             <td>
-                                {{ item.usuario }}
+
+                                {{item.usuario_id}}
+
                             </td>
 
                             <td>
-                                {{ item.comentario }}
+
+                                {{item.estado_id}}
+
                             </td>
 
                             <td>
-                                {{ item.fecha }}
+
+                                {{item.tipo_evento}}
+
+                            </td>
+
+                            <td>
+
+                                {{item.descripcion_cambio}}
+
+                            </td>
+
+                            <td>
+
+                                {{item.comentario}}
+
                             </td>
 
                         </tr>
