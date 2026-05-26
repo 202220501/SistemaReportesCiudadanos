@@ -9,10 +9,7 @@ from modulos.usuarios import usuarios_bp
 from modulos.reportes import reportes_bp
 from modulos.imagenes import (imagenes_bp, procesar_imagenes)
 from modulos.categorias import categorias_bp
-from modulos.imagenes import (
-    imagenes_bp,
-    procesar_imagenes
-)
+from modulos.auditoria import auditoria_bp
 
 # =====================================
 # APP
@@ -34,10 +31,41 @@ app.register_blueprint(usuarios_bp)
 app.register_blueprint(reportes_bp)
 app.register_blueprint(categorias_bp)
 app.register_blueprint(imagenes_bp)
+app.register_blueprint(auditoria_bp)
+
 
 # =====================================
 # RUTAS
 # =====================================
+# ==========================================
+# IMPORTAR MODULOS
+# ==========================================
+
+from modulos.usuarios import usuarios_bp
+from modulos.auditoria import auditoria_bp
+
+# ==========================================
+# APP
+# ==========================================
+
+app = Flask(__name__)
+
+# ==========================================
+# CLAVE DE SESION
+# ==========================================
+
+app.secret_key = "123456"
+
+# ==========================================
+# REGISTRAR MODULOS
+# ==========================================
+
+app.register_blueprint(usuarios_bp)
+app.register_blueprint(auditoria_bp)
+
+# ==========================================
+# RUTAS
+# ==========================================
 
 @app.route("/")
 def inicio():
@@ -114,10 +142,6 @@ def asignaciones():
 def admin():
     return render_template("admin.html")
 
-@app.route("/auditoria")
-def auditoria():
-    return render_template("auditoria.html")
-
 @app.route("/gestiondisp")
 def gestiondisp():
     return render_template("gestiondisp.html")
@@ -129,3 +153,8 @@ def gestiondisp():
 if __name__ == "__main__":
 
     app.run(debug=True)
+# ==========================================
+# EJECUTAR
+# ==========================================
+
+app.run(debug=True)
