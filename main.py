@@ -5,6 +5,7 @@ from firebase_config import db
 
 # IMPORTAR MODULO USUARIOS
 from modulos.usuarios import usuarios_bp
+from modulos.reportes import reportes_bp
 
 app = Flask(__name__)
 
@@ -13,6 +14,7 @@ app.secret_key = "123456"
 
 # REGISTRAR MODULO
 app.register_blueprint(usuarios_bp)
+app.register_blueprint(reportes_bp)
 
 @app.route("/")
 def inicio():
@@ -21,10 +23,6 @@ def inicio():
 @app.route("/usuarios")
 def usuarios():
     return render_template("usuarios.html")
-
-@app.route("/reportes")
-def reportes():
-    return render_template("reportes.html")
 
 @app.route("/categorias")
 def categorias():
