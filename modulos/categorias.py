@@ -3,7 +3,15 @@
 # FLASK + FIREBASE CRUD
 # =====================================================
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash
+)
+
 from firebase_admin import firestore
 
 # =====================================================
@@ -65,10 +73,10 @@ def agregar_categoria():
 
     try:
 
-        nombre = request.form['nombre']
-        descripcion = request.form['descripcion']
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
 
-        if nombre == "" or descripcion == "":
+        if not nombre or not descripcion:
 
             flash(
                 "Completa todos los campos",
@@ -115,8 +123,19 @@ def actualizar_categoria(id_categoria):
 
     try:
 
-        nuevo_nombre = request.form['nombre']
-        nueva_descripcion = request.form['descripcion']
+        nuevo_nombre = request.form.get('nombre')
+        nueva_descripcion = request.form.get('descripcion')
+
+        if not nuevo_nombre or not nueva_descripcion:
+
+            flash(
+                "Completa todos los campos",
+                "warning"
+            )
+
+            return redirect(
+                url_for('categorias.categorias')
+            )
 
         db.collection(
             "categorias"

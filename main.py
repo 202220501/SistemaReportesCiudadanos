@@ -8,6 +8,15 @@ from firebase_config import db
 from modulos.usuarios import usuarios_bp
 from modulos.reportes import reportes_bp
 from modulos.imagenes import (imagenes_bp, procesar_imagenes)
+from modulos.categorias import categorias_bp
+from modulos.imagenes import (
+    imagenes_bp,
+    procesar_imagenes
+)
+
+# =====================================
+# APP
+# =====================================
 
 app = Flask(__name__)
 
@@ -23,6 +32,7 @@ app.secret_key = "123456"
 
 app.register_blueprint(usuarios_bp)
 app.register_blueprint(reportes_bp)
+app.register_blueprint(categorias_bp)
 app.register_blueprint(imagenes_bp)
 
 # =====================================
@@ -40,6 +50,20 @@ def usuarios():
 @app.route("/categorias")
 def categorias():
     return render_template("categorias.html")
+@app.route("/reportes")
+def reportes():
+    return render_template("reportes.html")
+
+# =====================================
+# CATEGORIAS
+# =====================================
+
+# ESTA RUTA SE ELIMINA
+# PORQUE categorias.py YA LA CONTROLA
+
+# @app.route("/categorias")
+# def categorias():
+#     return render_template("categorias.html")
 
 @app.route("/gps")
 def gps():
@@ -57,6 +81,7 @@ def imagenes():
 
     if request.method == "POST":
         return procesar_imagenes()
+
     return render_template(
         "imagenes.html"
     )
@@ -97,4 +122,10 @@ def auditoria():
 def gestiondisp():
     return render_template("gestiondisp.html")
 
-app.run(debug=True)
+# =====================================
+# EJECUTAR
+# =====================================
+
+if __name__ == "__main__":
+
+    app.run(debug=True)
