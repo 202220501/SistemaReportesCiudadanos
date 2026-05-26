@@ -259,23 +259,39 @@
 
     <script>
 
+        // =====================================
+        // ARRAY GLOBAL
+        // =====================================
+
         let archivosSeleccionados = [];
 
         // =====================================
-        // PREVIEW
+        // PREVIEW IMAGENES
         // =====================================
 
         function previewImages(event){
 
-            archivosSeleccionados =
+            const nuevosArchivos =
                 Array.from(event.target.files);
+
+            // =====================================
+            // AGREGAR NUEVAS SIN BORRAR ANTERIORES
+            // =====================================
+
+            archivosSeleccionados = [
+
+                ...archivosSeleccionados,
+
+                ...nuevosArchivos
+
+            ];
 
             renderPreview();
 
         }
 
         // =====================================
-        // RENDER PREVIEW
+        // MOSTRAR PREVIEW
         // =====================================
 
         function renderPreview(){
