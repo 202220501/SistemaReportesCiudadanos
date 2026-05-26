@@ -1,16 +1,15 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-# MODIFICACIÓN 1: Le decimos a Flask que la carpeta templates está afuera (..)
+# Configuración para buscar la carpeta templates afuera
 app = Flask(__name__, template_folder='../templates')
 
 # =====================================================
 # CONFIGURACIÓN DE FIREBASE DIRECTA
 # =====================================================
 try:
-    # MODIFICACIÓN 2: La llave key.json también está afuera de la carpeta modulos
-    cred = credentials.Certificate("../key.json") 
+    cred = credentials.Certificate("clave.json") 
     
     if not firebase_admin._apps:
         firebase_admin.initialize_app(cred)
@@ -22,27 +21,62 @@ except Exception as e:
 # =====================================================
 # RUTAS WEB
 # =====================================================
+
+# Si entras a la raíz (http://127.0.0.1:5001/), te redirige al mapa automáticamente
+@app.route('/')
+def inicio():
+    return redirect('/gps')
+
 @app.route('/gps')
 def mostrar_mapa():
-    # Ahora sí encontrará el archivo en /templates/Ubicacion.html
-    return render_template('Ubicacion.html')
+    return render_template('gps.html')
 
 @app.route('/guardar_gps', methods=['POST'])
 def guardar_gps():
     datos = request.json
     try:
-        reporte_ref = db.collection('reportes_ubicacion').document()
+        reporte_ref = db.collection('reportes').document()
+        
         reporte_ref.set({
-            'titulo': datos['titulo'],
-            'ubicacion': firestore.GeoPoint(float(datos['lat']), float(datos['lng'])),
-            'timestamp': firestore.SERVER_TIMESTAMP
+            'id_usuario': 1,                            
+            'id_categoria': datos.get('id_categoria', 1), 
+            'id_estado_actual': 1,                      
+            'descripcion': datos.get('titulo', 'Sin descripción'), 
+            'direccion': datos.get('direccion', 'Sin dirección'),
+            'latitud': float(datos['lat']),
+            'longitud': float(datos['lng']),
+            'prioridad': datos.get('prioridad', 'Normal'),
+            'votos_totales': 0,                         
+            'fecha_creacion': firestore.SERVER_TIMESTAMP,
+            'fecha_actualizacion': firestore.SERVER_TIMESTAMP
         })
-        return jsonify({"mensaje": "✅ Ubicación guardada en Firebase"}), 200
+        
+        return jsonify({"mensaje": "✅ Ubicación guardada con la estructura oficial del diagrama"}), 200
     except Exception as e:
-        return jsonify({"mensaje": f"❌ Error al guardar: {str(e)}"}), 400
+        return jsonify({"mensaje": f"❌ Error al guardar en la base de datos: {str(e)}"}), 400
+
+# =====================================================
+# RUTA PARA LEER LA BASE DE DATOS
+# =====================================================
+@app.route('/ver_reportes', methods=['GET'])
+def ver_reportes():
+    try:
+        # Obtenemos en tiempo real los documentos almacenados con la clave.json
+        reportes_ref = db.collection('reportes').stream()
+        lista_reportes = []
+        
+        for doc in reportes_ref:
+            data = doc.to_dict()
+            data['id_documento'] = doc.id
+            lista_reportes.append(data)
+            
+        return jsonify(lista_reportes), 200
+    except Exception as e:
+        return jsonify({"error": f"No se pudo leer la base de datos: {str(e)}"}), 400
 
 # =====================================================
 # ARRANQUE DEL SERVIDOR
 # =====================================================
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Arranca en el puerto 5001 para ser independiente del equipo
+    app.run(debug=True, port=5001)

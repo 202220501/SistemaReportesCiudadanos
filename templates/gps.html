@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,13 +12,11 @@
         h3 { margin-top: 0; color: #333; font-size: 20px; }
         .input-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-family: inherit; }
         .row { display: flex; gap: 15px; }
         .col { flex: 1; }
         button { width: 100%; padding: 12px; background-color: #198754; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s;}
         button:hover { background-color: #157347; }
-        
-        /* Contenedor del mapa */
         #mapa { height: 450px; width: 100%; border-radius: 10px; z-index: 1; border: 1px solid #ddd;}
     </style>
 </head>
@@ -32,11 +29,36 @@
     <div class="container">
         <div class="card">
             <h3>Registrar Ubicación</h3>
+            
             <div class="input-group">
                 <label>Título del reporte</label>
                 <input type="text" id="titulo" placeholder="Ej. Falla eléctrica en Ecatepec">
             </div>
-            
+
+            <div class="input-group">
+                <label>Dirección aproximada</label>
+                <input type="text" id="direccion" placeholder="Ej. Av. Tecnológico S/N, Valle de Anahuac">
+            </div>
+
+            <div class="row">
+                <div class="col input-group">
+                    <label>Categoría</label>
+                    <select id="categoria">
+                        <option value="1">Bacheo y Vialidad</option>
+                        <option value="2">Alumbrado Público</option>
+                        <option value="3">Fuga de Agua</option>
+                        <option value="4">Seguridad</option>
+                    </select>
+                </div>
+                <div class="col input-group">
+                    <label>Prioridad</label>
+                    <select id="prioridad">
+                        <option value="Baja">Baja</option>
+                        <option value="Normal" selected>Normal</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+            </div>
             <div class="row">
                 <div class="col input-group">
                     <label>Latitud</label>
@@ -58,64 +80,61 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 1. Inicializar el mapa centrado en el TESE por defecto
         let mapa = L.map('mapa').setView([19.5103, -99.0415], 15);
         
-        // 2. Cargar el diseño del mapa (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(mapa);
 
-        // 3. Crear el "globito" rojo (marcador) y hacerlo arrastrable (draggable)
         let marcador = L.marker([19.5103, -99.0415], {draggable: true}).addTo(mapa);
 
-        // Referencias a las cajitas de texto
         const inputLat = document.getElementById('lat');
         const inputLng = document.getElementById('lng');
 
-        // ---------------------------------------------------------
-        // MAGIA 1: Si escribes un número, el marcador se mueve
-        // ---------------------------------------------------------
         function actualizarDesdeInputs() {
             let lat = parseFloat(inputLat.value);
             let lng = parseFloat(inputLng.value);
             if(!isNaN(lat) && !isNaN(lng)) {
                 let nuevaPos = new L.LatLng(lat, lng);
                 marcador.setLatLng(nuevaPos);
-                mapa.panTo(nuevaPos); // Centra el mapa en el nuevo punto
+                mapa.panTo(nuevaPos);
             }
         }
         inputLat.addEventListener('input', actualizarDesdeInputs);
         inputLng.addEventListener('input', actualizarDesdeInputs);
 
-        // ---------------------------------------------------------
-        // MAGIA 2: Si arrastras el marcador con el mouse, los números cambian solos
-        // ---------------------------------------------------------
         marcador.on('dragend', function(event) {
             let posicion = marcador.getLatLng();
-            inputLat.value = posicion.lat.toFixed(6); // Lo deja en 6 decimales
+            inputLat.value = posicion.lat.toFixed(6);
             inputLng.value = posicion.lng.toFixed(6);
         });
 
-        // ---------------------------------------------------------
-        // GUARDAR EN FIREBASE (Se conecta a tu app_escritorio.py)
-        // ---------------------------------------------------------
         async function guardarUbicacion() {
             const titulo = document.getElementById('titulo').value;
+            const direccion = document.getElementById('direccion').value;
+            const categoria = document.getElementById('categoria').value;
+            const prioridad = document.getElementById('prioridad').value;
             const lat = document.getElementById('lat').value;
             const lng = document.getElementById('lng').value;
 
-            if(!titulo || !lat || !lng) {
-                alert("Por favor llena el título y asegúrate de tener las coordenadas.");
+            if(!titulo || !lat || !lng || !direccion) {
+                alert("Por favor llena todos los campos de texto y asegúrate de tener las coordenadas.");
                 return;
             }
 
             try {
-                // Se envía por POST a la ruta que armamos en Flask
+                // Ahora enviamos todos los datos extraídos al backend
                 const response = await fetch('/guardar_gps', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ titulo: titulo, lat: lat, lng: lng })
+                    body: JSON.stringify({ 
+                        titulo: titulo, 
+                        direccion: direccion,
+                        id_categoria: parseInt(categoria), // Convertimos a número para respetar el E-R
+                        prioridad: prioridad,
+                        lat: lat, 
+                        lng: lng 
+                    })
                 });
                 
                 const resultado = await response.json();
