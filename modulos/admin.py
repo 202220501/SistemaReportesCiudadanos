@@ -41,21 +41,17 @@ def panel_admin():
 
     try:
 
-        # =========================================
+# =========================================
         # FILTRO
         # =========================================
-
         if filtro == "Todos":
-
             docs = coleccion_reportes.stream()
-
-        else:
-
-            docs = coleccion_reportes.where(
-                'estado',
-                '==',
-                filtro
-            ).stream()
+        elif filtro == "Pendiente":
+            # Buscamos estado_id "1" en lugar de la palabra "Pendiente"
+            docs = coleccion_reportes.where('estado_id', '==', '1').stream()
+        elif filtro == "Atendido":
+            # Asumiendo que el "2" es para los Atendidos
+            docs = coleccion_reportes.where('estado_id', '==', '2').stream()
 
         # =========================================
         # RECORRER REPORTES
