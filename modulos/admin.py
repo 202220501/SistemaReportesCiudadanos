@@ -2,7 +2,6 @@
 # PANEL ADMINISTRATIVO
 # FLASK + FIREBASE
 # =====================================================
-from modulos.admin import admin_bp
 from flask import Blueprint, render_template, request
 from firebase_admin import firestore
 
@@ -41,7 +40,7 @@ def panel_admin():
 
     try:
 
-# =========================================
+        # =========================================
         # FILTRO
         # =========================================
         if filtro == "Todos":
@@ -56,24 +55,25 @@ def panel_admin():
         # =========================================
         # RECORRER REPORTES
         # =========================================
-
         for doc in docs:
 
             datos = doc.to_dict()
-
+            
+            # Guardamos el ID único del documento de Firebase por si lo necesitas después
             datos['id'] = doc.id
 
             lista_reportes.append(datos)
-
-    except Exception as e:
-
+            
+        # Print de depuración para que veas en tu terminal negra qué está llegando
         print("MIS REPORTES DE FIREBASE:", lista_reportes)
 
+    except Exception as e:
+        
+        # Si algo falla con la base de datos, te avisará aquí
+        print("ERROR CON FIREBASE:", e)
+
     return render_template(
-
         'admin.html',
-
         reportes=lista_reportes,
         filtro=filtro
-
     )
