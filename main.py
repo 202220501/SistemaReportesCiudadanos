@@ -6,6 +6,7 @@ from firebase_config import db
 # =====================================
 
 from modulos.usuarios import usuarios_bp
+from modulos.historial import historial_bp
 from modulos.reportes import reportes_bp
 from modulos.imagenes import (imagenes_bp, procesar_imagenes)
 from modulos.categorias import categorias_bp
@@ -18,7 +19,6 @@ from modulos.imagenes import (
 # APP
 # =====================================
 
-from modulos.historial import historial_bp
 
 
 app = Flask(__name__)
@@ -37,11 +37,12 @@ app.register_blueprint(usuarios_bp)
 app.register_blueprint(reportes_bp)
 app.register_blueprint(categorias_bp)
 app.register_blueprint(imagenes_bp)
+app.register_blueprint(historial_bp)
 
 # =====================================
 # RUTAS
 # =====================================
-app.register_blueprint(historial_bp)
+
 
 @app.route("/")
 def inicio():
