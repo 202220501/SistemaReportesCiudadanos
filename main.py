@@ -1,15 +1,21 @@
 from flask import Flask, render_template
 
-# IMPORTAR MODULO USUARIOS
+# =====================================================
+# IMPORTAR MODULOS
+# =====================================================
+
 from modulos.usuarios import usuarios_bp
+from modulos.categorias import categorias_bp
+
 
 app = Flask(__name__)
 
-# CLAVE DE SESION
+
 app.secret_key = "123456"
 
-# REGISTRAR MODULO
+
 app.register_blueprint(usuarios_bp)
+app.register_blueprint(categorias_bp)
 
 @app.route("/")
 def inicio():
@@ -23,9 +29,9 @@ def usuarios():
 def reportes():
     return render_template("reportes.html")
 
-@app.route("/categorias")
-def categorias():
-    return render_template("categorias.html")
+# @app.route("/categorias")
+# def categorias():
+#     return render_template("categorias.html")
 
 @app.route("/gps")
 def gps():
@@ -71,4 +77,7 @@ def auditoria():
 def gestiondisp():
     return render_template("gestiondisp.html")
 
-app.run(debug=True)
+
+if __name__ == "__main__":
+
+    app.run(debug=True)

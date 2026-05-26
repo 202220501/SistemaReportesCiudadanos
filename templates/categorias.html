@@ -11,7 +11,9 @@
     >
 
     <title>
-        Categorías
+
+        Sistema de Categorías
+
     </title>
 
     <!-- BOOTSTRAP -->
@@ -70,6 +72,7 @@
         <!-- ALERTAS -->
 
         {% with messages = get_flashed_messages(with_categories=true) %}
+
             {% if messages %}
 
                 {% for categoria, mensaje in messages %}
@@ -83,6 +86,7 @@
                 {% endfor %}
 
             {% endif %}
+
         {% endwith %}
 
         <!-- FORMULARIO -->
@@ -163,27 +167,19 @@
 
             <div class="table-responsive">
 
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover">
 
                     <thead class="table-dark">
 
                         <tr>
 
-                            <th>
-                                ID
-                            </th>
+                            <th>ID</th>
 
-                            <th>
-                                Nombre
-                            </th>
+                            <th>Nombre</th>
 
-                            <th>
-                                Descripción
-                            </th>
+                            <th>Descripción</th>
 
-                            <th>
-                                Acciones
-                            </th>
+                            <th>Acciones</th>
 
                         </tr>
 
@@ -191,74 +187,100 @@
 
                     <tbody>
 
-                        {% for categoria in categorias %}
+                        {% if categorias %}
 
-                        <tr>
+                            {% for categoria in categorias %}
 
-                            <td>
-                                {{ categoria.id }}
-                            </td>
+                            <tr>
 
-                            <td>
-                                {{ categoria.nombre }}
-                            </td>
+                                <td>
 
-                            <td>
-                                {{ categoria.descripcion }}
-                            </td>
+                                    {{ categoria.id }}
 
-                            <td>
+                                </td>
 
-                                <!-- ACTUALIZAR -->
+                                <td>
 
-                                <form
-                                    action="/actualizar_categoria/{{ categoria.id }}"
-                                    method="POST"
-                                    class="mb-2"
+                                    {{ categoria.nombre }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ categoria.descripcion }}
+
+                                </td>
+
+                                <td>
+
+                                    <!-- ACTUALIZAR -->
+
+                                    <form
+                                        action="/actualizar_categoria/{{ categoria.id }}"
+                                        method="POST"
+                                        class="mb-2"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            name="nombre"
+                                            value="{{ categoria.nombre }}"
+                                            class="form-control mb-2"
+                                            required
+                                        >
+
+                                        <input
+                                            type="text"
+                                            name="descripcion"
+                                            value="{{ categoria.descripcion }}"
+                                            class="form-control mb-2"
+                                            required
+                                        >
+
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                        >
+
+                                            Actualizar
+
+                                        </button>
+
+                                    </form>
+
+                                    <!-- ELIMINAR -->
+
+                                    <a
+                                        href="/eliminar_categoria/{{ categoria.id }}"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Eliminar categoría?')"
+                                    >
+
+                                        Eliminar
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="4"
+                                    class="text-center"
                                 >
 
-                                    <input
-                                        type="text"
-                                        name="nombre"
-                                        value="{{ categoria.nombre }}"
-                                        class="form-control mb-2"
-                                        required
-                                    >
+                                    No hay categorías registradas
 
-                                    <input
-                                        type="text"
-                                        name="descripcion"
-                                        value="{{ categoria.descripcion }}"
-                                        class="form-control mb-2"
-                                        required
-                                    >
+                                </td>
 
-                                    <button
-                                        class="btn btn-primary btn-sm"
-                                    >
+                            </tr>
 
-                                        Actualizar
-
-                                    </button>
-
-                                </form>
-
-                                <!-- ELIMINAR -->
-
-                                <a
-                                    href="/eliminar_categoria/{{ categoria.id }}"
-                                    class="btn btn-danger btn-sm"
-                                >
-
-                                    Eliminar
-
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-                        {% endfor %}
+                        {% endif %}
 
                     </tbody>
 
