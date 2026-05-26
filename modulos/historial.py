@@ -1,12 +1,10 @@
-from firebase_config import db
 # =====================================================
-# MODULO HISTORIAL DE ESTADOS
-# FLASK + FIREBASE
+# MODULO HISTORIAL
+# SISTEMA REPORTES CIUDADANOS
 # =====================================================
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from firebase_admin import firestore
-from datetime import datetime
 
 # =====================================================
 # BLUEPRINT
@@ -24,37 +22,69 @@ historial_bp = Blueprint(
 db = firestore.client()
 
 # =====================================================
-# MOSTRAR PAGINA
+# MOSTRAR HISTORIAL
 # =====================================================
 
 @historial_bp.route('/historial')
 def historial():
 
-    historial_datos = []
-
-    return render_template(
-        'historial.html',
-        historial=historial_datos
-    )
-
-# =====================================================
-# GUARDAR ESTADO
-# =====================================================
-
-@historial_bp.route('/guardar_estado', methods=['POST'])
-def guardar_estado():
+    lista_historial = []
 
     try:
 
-        id_reporte = request.form['id_reporte']
-        estado = request.form['estado']
-        usuario = request.form['usuario']
-        comentario = request.form['comentario']
+        historial_db = db.collection(
+            "historial"
+        ).stream()
+
+        for item in historial_db:
+
+            datos = item.to_dict()
+
+            lista_historial.append(
+                datos
+            )
+
+    except Exception as e:
+
+        print("Error:", e)
+
+    return render_template(
+        'historial.html',
+        historial=lista_historial
+    )
+
+# =====================================================
+# GUARDAR HISTORIAL
+# =====================================================
+
+@historial_bp.route(
+    '/guardar_historial',
+    methods=['POST']
+)
+def guardar_historial():
+
+    try:
+
+        reporte_id = request.form['reporte_id']
+
+        usuario_id = request.form['usuario_id']
+
+        estado_id = request.form['estado_id']
+
+        tipo_evento = request.form['tipo_evento']
+
+        descripcion_cambio = request.form[
+            'descripcion_cambio'
+        ]
+
+        comentario = request.form[
+            'comentario'
+        ]
 
         if (
-            id_reporte == "" or
-            estado == "" or
-            usuario == ""
+            reporte_id == "" or
+            usuario_id == "" or
+            estado_id == ""
         ):
 
             flash(
@@ -63,67 +93,49 @@ def guardar_estado():
             )
 
             return redirect(
-                url_for('historial.historial')
+                url_for(
+                    'historial.historial'
+                )
             )
 
         datos = {
 
-            "estado": estado,
-            "usuario": usuario,
+            "reporte_id": reporte_id,
+
+            "usuario_id": usuario_id,
+
+            "estado_id": estado_id,
+
+            "tipo_evento": tipo_evento,
+
+            "descripcion_cambio":
+            descripcion_cambio,
+
             "comentario": comentario,
-            "fecha": datetime.now().strftime(
-                "%d/%m/%Y %H:%M:%S"
-            )
+
+            "fecha_cambio":
+            firestore.SERVER_TIMESTAMP
 
         }
 
-        db.collection("reportes") \
-          .document(id_reporte) \
-          .collection("historial_estados") \
-          .add(datos)
+        db.collection(
+            "historial"
+        ).add(datos)
 
         flash(
-            "Estado guardado correctamente",
+            "Historial guardado correctamente",
             "success"
         )
 
     except Exception as e:
 
-        flash(str(e), "danger")
+        flash(
+            str(e),
+            "danger"
+        )
 
     return redirect(
-        url_for('historial.ver_historial',
-        id_reporte=id_reporte)
-    )
-
-# =====================================================
-# MOSTRAR HISTORIAL
-# =====================================================
-
-@historial_bp.route('/ver_historial/<id_reporte>')
-def ver_historial(id_reporte):
-
-    historial_datos = []
-
-    try:
-
-        historial = db.collection("reportes") \
-                      .document(id_reporte) \
-                      .collection("historial_estados") \
-                      .stream()
-
-        for item in historial:
-
-            historial_datos.append(
-                item.to_dict()
-            )
-
-    except Exception as e:
-
-        flash(str(e), "danger")
-
-    return render_template(
-        'historial.html',
-        historial=historial_datos,
-        id_reporte=id_reporte
+        url_for(
+            'historial.historial'
+        )
     )
