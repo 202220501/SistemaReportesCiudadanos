@@ -10,6 +10,10 @@ from modulos.historial import historial_bp
 from modulos.reportes import reportes_bp
 from modulos.imagenes import (imagenes_bp, procesar_imagenes)
 from modulos.categorias import categorias_bp
+from modulos.imagenes import (
+    imagenes_bp,
+    procesar_imagenes
+)
 
 # =====================================
 # APP
