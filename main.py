@@ -44,6 +44,9 @@ app.register_blueprint(auditoria_bp)
 from modulos.usuarios import usuarios_bp
 from modulos.auditoria import auditoria_bp
 
+# 1. IMPORTAMOS TU MÓDULO AQUÍ
+from modulos.admin import admin_bp
+
 # ==========================================
 # APP
 # ==========================================
@@ -62,6 +65,9 @@ app.secret_key = "123456"
 
 app.register_blueprint(usuarios_bp)
 app.register_blueprint(auditoria_bp)
+
+# 2. REGISTRAMOS TU MÓDULO AQUÍ
+app.register_blueprint(admin_bp)
 
 # ==========================================
 # RUTAS
@@ -138,9 +144,10 @@ def dependencias():
 def asignaciones():
     return render_template("asignaciones.html")
 
-@app.route("/admin")
-def admin():
-    return render_template("admin.html")
+# 3. SILENCIAMOS ESTA RUTA PARA QUE NO CHOQUE CON LA TUYA
+# @app.route("/admin")
+# def admin():
+#     return render_template("admin.html")
 
 @app.route("/gestiondisp")
 def gestiondisp():
