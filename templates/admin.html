@@ -125,9 +125,11 @@
                 <td>{{ reporte.prioridad }}</td>
                 <td>
                   {% if reporte.estado_id == '1' %}
-                  <span class="badge badge-pendiente">Pendiente</span>
+                    <span class="badge badge-pendiente">Pendiente</span>
+                  {% elif reporte.estado_id == '2' %}
+                    <span class="badge badge-atendido">Atendido</span>
                   {% else %}
-                  <span class="badge badge-atendido">Atendido</span>
+                    <span class="badge bg-secondary">Desconocido</span>
                   {% endif %}
                 </td>
                 <td>{{ reporte.fecha_reporte }}</td>
