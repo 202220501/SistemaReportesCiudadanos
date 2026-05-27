@@ -7,13 +7,15 @@ from firebase_config import db
 
 from modulos.usuarios import usuarios_bp
 from modulos.dependencias import dependencias_bp
+from modulos.historial import historial_bp
 from modulos.categorias import categorias_bp
 from modulos.estados import estados_bp
 from modulos.imagenes import (
     imagenes_bp,
     procesar_imagenes
 )
-
+from modulos.auditoria import auditoria_bp
+from modulos.reportes import reportes_bp
 # =====================================
 # APP
 # =====================================
@@ -32,9 +34,12 @@ app.secret_key = "123456"
 
 app.register_blueprint(usuarios_bp)
 app.register_blueprint(categorias_bp)
+app.register_blueprint(historial_bp)
 app.register_blueprint(estados_bp)
 app.register_blueprint(imagenes_bp)
 app.register_blueprint(dependencias_bp)
+app.register_blueprint(auditoria_bp)
+app.register_blueprint(reportes_bp)
 # =====================================
 # RUTAS
 # =====================================
@@ -47,9 +52,9 @@ def inicio():
 def usuarios():
     return render_template("usuarios.html")
 
-@app.route("/reportes")
-def reportes():
-    return render_template("reportes.html")
+#@app.route("/reportes")
+#def reportes():
+#return render_template("reportes.html")
 
 # =====================================
 # CATEGORIAS

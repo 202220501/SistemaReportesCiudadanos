@@ -254,73 +254,7 @@
 
                     </thead>
 
-                    <tbody>
-
-                        <tr>
-
-                            <td>1</td>
-                            <td>Juan Pérez</td>
-                            <td>juan@gmail.com</td>
-                            <td>Samsung Galaxy S24</td>
-                            <td>Android 14</td>
-                            <td>14/05/2026 12:30</td>
-
-                            <td>
-
-                                <span class="estado activo">
-                                    Activo
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <button class="btn btn-detalle btn-sm">
-                                    <i class="bi bi-eye"></i>
-                                    Ver
-                                </button>
-
-                                <button class="btn btn-bloquear btn-sm">
-                                    <i class="bi bi-lock"></i>
-                                    Bloquear
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>2</td>
-                            <td>María López</td>
-                            <td>maria@gmail.com</td>
-                            <td>Laptop HP</td>
-                            <td>Windows 11</td>
-                            <td>13/05/2026 20:15</td>
-
-                            <td>
-
-                                <span class="estado inactivo">
-                                    Inactivo
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <button class="btn btn-detalle btn-sm">
-                                    <i class="bi bi-eye"></i>
-                                    Ver
-                                </button>
-
-                                <button class="btn btn-bloquear btn-sm">
-                                    <i class="bi bi-lock"></i>
-                                    Bloquear
-                                </button>
-
-                            </td>
-
-                        </tr>
+                    <tbody id="tablaDispositivos">
 
                     </tbody>
 
@@ -331,6 +265,175 @@
         </div>
 
     </div>
+<script>
 
+    // DATOS FALSOS
+
+    const nombres = [
+        "Juan Pérez",
+        "María López",
+        "Carlos Ramírez",
+        "Ana Torres",
+        "Luis Hernández",
+        "Fernanda Cruz",
+        "Pedro Sánchez",
+        "Daniela Flores",
+        "Miguel Ángel",
+        "Andrea Ruiz"
+    ];
+
+    const dispositivos = [
+        "Samsung Galaxy S24",
+        "iPhone 15 Pro",
+        "Laptop HP",
+        "MacBook Air",
+        "Xiaomi Redmi Note",
+        "Lenovo ThinkPad",
+        "Huawei MatePad",
+        "iPad Pro",
+        "Dell Inspiron",
+        "Asus ROG"
+    ];
+
+    const sistemas = [
+        "Android 14",
+        "iOS 18",
+        "Windows 11",
+        "macOS Sonoma"
+    ];
+
+    const tabla = document.getElementById("tablaDispositivos");
+
+    // GENERAR 100 FILAS
+
+    for(let i = 1; i <= 100; i++){
+
+        let nombre = nombres[Math.floor(Math.random() * nombres.length)];
+
+        let correo = nombre.toLowerCase().replace(" ", ".") + i + "@gmail.com";
+
+        let dispositivo = dispositivos[Math.floor(Math.random() * dispositivos.length)];
+
+        let sistema = sistemas[Math.floor(Math.random() * sistemas.length)];
+
+        let activo = Math.random() > 0.3;
+
+        let estadoTexto = activo ? "Activo" : "Inactivo";
+
+        let estadoClase = activo ? "activo" : "inactivo";
+
+        let hora = Math.floor(Math.random() * 24);
+        let minutos = Math.floor(Math.random() * 60).toString().padStart(2,'0');
+
+        let fila = `
+
+        <tr>
+
+            <td>${i}</td>
+            <td>${nombre}</td>
+            <td>${correo}</td>
+            <td>${dispositivo}</td>
+            <td>${sistema}</td>
+            <td>27/05/2026 ${hora}:${minutos}</td>
+
+            <td>
+
+                <span class="estado ${estadoClase}">
+                    ${estadoTexto}
+                </span>
+
+            </td>
+
+            <td>
+
+                <button class="btn btn-detalle btn-sm">
+                    <i class="bi bi-eye"></i>
+                    Ver
+                </button>
+
+                <button class="btn btn-bloquear btn-sm">
+                    <i class="bi bi-lock"></i>
+                    Bloquear
+                </button>
+
+            </td>
+
+        </tr>
+
+        `;
+
+        tabla.innerHTML += fila;
+
+    }
+
+    // BOTON VER
+
+    document.addEventListener("click", function(e){
+
+        if(e.target.closest(".btn-detalle")){
+
+            alert("Mostrando información completa del dispositivo.");
+
+        }
+
+    });
+
+    // BOTON BLOQUEAR
+
+    document.addEventListener("click", function(e){
+
+        if(e.target.closest(".btn-bloquear")){
+
+            let btn = e.target.closest(".btn-bloquear");
+
+            let fila = btn.closest("tr");
+
+            let estado = fila.querySelector(".estado");
+
+            let confirmar = confirm("¿Deseas bloquear este dispositivo?");
+
+            if(confirmar){
+
+                estado.textContent = "Bloqueado";
+
+                estado.classList.remove("activo");
+
+                estado.classList.add("inactivo");
+
+                alert("Dispositivo bloqueado correctamente.");
+
+            }
+
+        }
+
+    });
+
+    // BUSCADOR
+
+    const buscador = document.querySelector("input");
+
+    buscador.addEventListener("keyup", function(){
+
+        let texto = buscador.value.toLowerCase();
+
+        document.querySelectorAll("tbody tr").forEach(function(fila){
+
+            let contenido = fila.textContent.toLowerCase();
+
+            if(contenido.includes(texto)){
+
+                fila.style.display = "";
+
+            }else{
+
+                fila.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+</script>
 </body>
 </html>

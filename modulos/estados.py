@@ -2,7 +2,7 @@
 # MODULO ESTADOS
 # =========================================
 
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, request
 from firebase_config import db
 
 # =========================================
@@ -28,6 +28,25 @@ def estados():
     resueltos = 0
     cancelados = 0
 
+    # =========================================
+    # FILTROS
+    # =========================================
+
+    buscar = request.args.get(
+        "buscar",
+        ""
+    ).lower()
+
+    estado_filtro = request.args.get(
+        "estado",
+        "Todos"
+    )
+
+    categoria_filtro = request.args.get(
+        "categoria",
+        "Todas"
+    )
+
     try:
 
         reportes_db = db.collection(
@@ -40,14 +59,35 @@ def estados():
 
             datos["id"] = reporte.id
 
+            titulo = datos.get(
+                "titulo",
+                ""
+            ).lower()
+
+            categoria = str(
+                datos.get(
+                    "categoria_id",
+                    ""
+                )
+            )
+
+            # =========================================
+            # FILTRO BUSQUEDA
+            # =========================================
+
+            if buscar != "":
+
+                if buscar not in titulo:
+                    continue
+
             estado_id = datos.get(
                 "estado_id",
                 "1"
             )
 
-            # =========================
+            # =========================================
             # ESTADOS
-            # =========================
+            # =========================================
 
             if estado_id == "1":
 
@@ -81,6 +121,24 @@ def estados():
 
                 datos["estado"] = "Desconocido"
                 datos["clase_estado"] = "secondary"
+
+            # =========================================
+            # FILTRO ESTADO
+            # =========================================
+
+            if estado_filtro != "Todos":
+
+                if datos["estado"] != estado_filtro:
+                    continue
+
+            # =========================================
+            # FILTRO CATEGORIA
+            # =========================================
+
+            if categoria_filtro != "Todas":
+
+                if categoria != categoria_filtro:
+                    continue
 
             lista_reportes.append(
                 datos
@@ -121,6 +179,7 @@ def ver_reporte(id):
         if reporte.exists:
 
             datos = reporte.to_dict()
+
             datos["id"] = reporte.id
 
             return render_template(
