@@ -9,6 +9,8 @@ from firebase_admin import firestore
 
 from datetime import datetime
 
+from modulos.auditoria import registrar_evento
+
 import os
 
 # =====================================
@@ -117,7 +119,21 @@ def procesar_imagenes():
             }
 
             referencia.set(datos)
+            # =====================================
+            # AUDITORIA
+            # =====================================
 
+            registrar_evento(
+
+            nombre,
+
+            "SUBIR_IMAGEN",
+
+            "imagenes",
+
+            "Se subió la imagen"
+            )
+            
             cantidad += 1
 
         flash(
