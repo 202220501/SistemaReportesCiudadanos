@@ -49,10 +49,6 @@
             border-radius: 15px;
         }
 
-        .icono{
-            font-size: 25px;
-        }
-
     </style>
 
 </head>
@@ -110,9 +106,7 @@
 
                 <div class="row">
 
-                    <!-- NOMBRE -->
-
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
 
                         <label class="form-label">
 
@@ -129,9 +123,7 @@
 
                     </div>
 
-                    <!-- DESCRIPCION -->
-
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
 
                         <label class="form-label">
 
@@ -144,25 +136,6 @@
                             name="descripcion"
                             class="form-control"
                             required
-                        >
-
-                    </div>
-
-                    <!-- ICONO -->
-
-                    <div class="col-md-4 mb-3">
-
-                        <label class="form-label">
-
-                            Ícono
-
-                        </label>
-
-                        <input
-                            type="text"
-                            name="icono"
-                            class="form-control"
-                            placeholder="🛣️"
                         >
 
                     </div>
@@ -202,8 +175,6 @@
 
                             <th>ID</th>
 
-                            <th>Ícono</th>
-
                             <th>Nombre</th>
 
                             <th>Descripción</th>
@@ -225,12 +196,6 @@
                                 <td>
 
                                     {{ categoria.id }}
-
-                                </td>
-
-                                <td class="icono">
-
-                                    {{ categoria.icono }}
 
                                 </td>
 
@@ -272,13 +237,6 @@
                                             required
                                         >
 
-                                        <input
-                                            type="text"
-                                            name="icono"
-                                            value="{{ categoria.icono }}"
-                                            class="form-control mb-2"
-                                        >
-
                                         <button
                                             class="btn btn-primary btn-sm"
                                         >
@@ -312,7 +270,7 @@
                             <tr>
 
                                 <td
-                                    colspan="5"
+                                    colspan="4"
                                     class="text-center"
                                 >
 
