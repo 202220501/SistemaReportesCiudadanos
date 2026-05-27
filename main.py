@@ -14,6 +14,7 @@ from modulos.imagenes import (
     procesar_imagenes
 )
 from modulos.auditoria import auditoria_bp
+from modulos.reportes import reportes_bp
 # =====================================
 # APP
 # =====================================
@@ -36,7 +37,7 @@ app.register_blueprint(historial_bp)
 app.register_blueprint(estados_bp)
 app.register_blueprint(imagenes_bp)
 app.register_blueprint(auditoria_bp)
-
+app.register_blueprint(reportes_bp)
 # =====================================
 # RUTAS
 # =====================================
@@ -49,9 +50,9 @@ def inicio():
 def usuarios():
     return render_template("usuarios.html")
 
-@app.route("/reportes")
-def reportes():
-    return render_template("reportes.html")
+#@app.route("/reportes")
+#def reportes():
+#return render_template("reportes.html")
 
 # =====================================
 # CATEGORIAS
