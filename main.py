@@ -6,13 +6,14 @@ from firebase_config import db
 # =====================================
 
 from modulos.usuarios import usuarios_bp
+from modulos.historial import historial_bp
 from modulos.categorias import categorias_bp
 from modulos.estados import estados_bp
 from modulos.imagenes import (
     imagenes_bp,
     procesar_imagenes
 )
-
+from modulos.auditoria import auditoria_bp
 # =====================================
 # APP
 # =====================================
@@ -31,8 +32,10 @@ app.secret_key = "123456"
 
 app.register_blueprint(usuarios_bp)
 app.register_blueprint(categorias_bp)
+app.register_blueprint(historial_bp)
 app.register_blueprint(estados_bp)
 app.register_blueprint(imagenes_bp)
+app.register_blueprint(auditoria_bp)
 
 # =====================================
 # RUTAS
