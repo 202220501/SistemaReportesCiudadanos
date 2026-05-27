@@ -13,7 +13,7 @@ from modulos.imagenes import (
     imagenes_bp,
     procesar_imagenes
 )
-
+from modulos.auditoria import auditoria_bp
 # =====================================
 # APP
 # =====================================
@@ -35,6 +35,7 @@ app.register_blueprint(categorias_bp)
 app.register_blueprint(historial_bp)
 app.register_blueprint(estados_bp)
 app.register_blueprint(imagenes_bp)
+app.register_blueprint(auditoria_bp)
 
 # =====================================
 # RUTAS
