@@ -75,6 +75,7 @@ def agregar_categoria():
 
         nombre = request.form.get('nombre')
         descripcion = request.form.get('descripcion')
+        icono = request.form.get('icono')
 
         if not nombre or not descripcion:
 
@@ -90,7 +91,8 @@ def agregar_categoria():
         categoria = {
 
             "nombre": nombre,
-            "descripcion": descripcion
+            "descripcion": descripcion,
+            "icono": icono
 
         }
 
@@ -125,6 +127,7 @@ def actualizar_categoria(id_categoria):
 
         nuevo_nombre = request.form.get('nombre')
         nueva_descripcion = request.form.get('descripcion')
+        nuevo_icono = request.form.get('icono')
 
         if not nuevo_nombre or not nueva_descripcion:
 
@@ -142,7 +145,8 @@ def actualizar_categoria(id_categoria):
         ).document(id_categoria).update({
 
             "nombre": nuevo_nombre,
-            "descripcion": nueva_descripcion
+            "descripcion": nueva_descripcion,
+            "icono": nuevo_icono
 
         })
 

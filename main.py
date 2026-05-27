@@ -6,17 +6,15 @@ from firebase_config import db
 # =====================================
 
 from modulos.usuarios import usuarios_bp
-from modulos.historial import historial_bp
-from modulos.reportes import reportes_bp
-from modulos.imagenes import (imagenes_bp, procesar_imagenes)
 from modulos.categorias import categorias_bp
-from modulos.auditoria import auditoria_bp
+from modulos.imagenes import (
+    imagenes_bp,
+    procesar_imagenes
+)
 
 # =====================================
 # APP
 # =====================================
-
-
 
 app = Flask(__name__)
 
@@ -31,52 +29,12 @@ app.secret_key = "123456"
 # =====================================
 
 app.register_blueprint(usuarios_bp)
-app.register_blueprint(reportes_bp)
 app.register_blueprint(categorias_bp)
 app.register_blueprint(imagenes_bp)
-app.register_blueprint(historial_bp)
-app.register_blueprint(auditoria_bp)
-
 
 # =====================================
 # RUTAS
 # =====================================
-# ==========================================
-# IMPORTAR MODULOS
-# ==========================================
-
-from modulos.usuarios import usuarios_bp
-from modulos.auditoria import auditoria_bp
-
-# 1. IMPORTAMOS TU MÓDULO AQUÍ
-from modulos.admin import admin_bp
-
-# ==========================================
-# APP
-# ==========================================
-
-app = Flask(__name__)
-
-# ==========================================
-# CLAVE DE SESION
-# ==========================================
-
-app.secret_key = "123456"
-
-# ==========================================
-# REGISTRAR MODULOS
-# ==========================================
-
-app.register_blueprint(usuarios_bp)
-app.register_blueprint(auditoria_bp)
-
-# 2. REGISTRAMOS TU MÓDULO AQUÍ
-app.register_blueprint(admin_bp)
-
-# ==========================================
-# RUTAS
-# ==========================================
-
 
 @app.route("/")
 def inicio():
@@ -86,9 +44,6 @@ def inicio():
 def usuarios():
     return render_template("usuarios.html")
 
-@app.route("/categorias")
-def categorias():
-    return render_template("categorias.html")
 @app.route("/reportes")
 def reportes():
     return render_template("reportes.html")
@@ -149,10 +104,13 @@ def dependencias():
 def asignaciones():
     return render_template("asignaciones.html")
 
-# 3. SILENCIAMOS ESTA RUTA PARA QUE NO CHOQUE CON LA TUYA
-# @app.route("/admin")
-# def admin():
-#     return render_template("admin.html")
+@app.route("/admin")
+def admin():
+    return render_template("admin.html")
+
+@app.route("/auditoria")
+def auditoria():
+    return render_template("auditoria.html")
 
 @app.route("/gestiondisp")
 def gestiondisp():
@@ -165,8 +123,3 @@ def gestiondisp():
 if __name__ == "__main__":
 
     app.run(debug=True)
-# ==========================================
-# EJECUTAR
-# ==========================================
-
-app.run(debug=True)
