@@ -165,7 +165,7 @@
 
                 <div class="card shadow-lg p-4">
 
-                    <h2 class="text-warning">25</h2>
+                    <h2 class="text-warning">{{ pendientes }}</h2>
 
                     <p>
                         Reportes Pendientes
@@ -179,7 +179,7 @@
 
                 <div class="card shadow-lg p-4">
 
-                    <h2 class="text-primary">18</h2>
+                    <h2 class="text-primary">{{ proceso }}</h2>
 
                     <p>
                         En Proceso
@@ -193,7 +193,7 @@
 
                 <div class="card shadow-lg p-4">
 
-                    <h2 class="text-success">42</h2>
+                    <h2 class="text-success">{{ resueltos }}</h2>
 
                     <p>
                         Reportes Resueltos
@@ -207,7 +207,7 @@
 
                 <div class="card shadow-lg p-4">
 
-                    <h2 class="text-danger">4</h2>
+                    <h2 class="text-danger">{{ cancelados }}</h2>
 
                     <p>
                         Reportes Cancelados
@@ -295,128 +295,82 @@
 
             <div class="table-responsive">
 
-                <table class="table table-bordered table-hover">
+               <table class="table table-bordered table-hover">
 
-                    <thead>
+    <thead>
 
-                        <tr>
+        <tr>
 
-                            <th>ID</th>
-                            <th>Reporte</th>
-                            <th>Categoría</th>
-                            <th>Ciudadano</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Prioridad</th>
-                            <th>Acciones</th>
+            <th>ID</th>
+            <th>Titulo</th>
+            <th>Categoría</th>
+            <th>Ciudadano</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Acciones</th>
 
-                        </tr>
+        </tr>
 
-                    </thead>
+    </thead>
 
-                    <tbody>
+    <tbody>
 
-                        <tr>
+    {% for reporte in reportes %}
 
-                            <td>1</td>
-                            <td>Fuga de agua</td>
-                            <td>Agua</td>
-                            <td>Juan Pérez</td>
-                            <td>14/05/2026</td>
+        <tr>
 
-                            <td>
+            <td>{{ reporte.id }}</td>
 
-                                <span class="estado pendiente">
-                                    Pendiente
-                                </span>
+            <td>{{ reporte.titulo }}</td>
 
-                            </td>
+            <td>{{ reporte.categoria_id }}</td>
 
-                            <td>Alta</td>
+            <td>{{ reporte.usuario_id }}</td>
 
-                            <td>
+            <td>{{ reporte.fecha_reporte }}</td>
 
-                                <button class="btn btn-ver btn-sm">
-                                    <i class="bi bi-eye"></i>
-                                    Ver
-                                </button>
+            <td>
 
-                                <button class="btn btn-actualizar btn-sm">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    Actualizar
-                                </button>
+                <span class="estado {{ reporte.clase_estado }}">
 
-                            </td>
+                    {{ reporte.estado }}
 
-                        </tr>
+                </span>
 
-                        <tr>
+            </td>
 
-                            <td>2</td>
-                            <td>Bache en avenida</td>
-                            <td>Calles</td>
-                            <td>María López</td>
-                            <td>13/05/2026</td>
+            <td>{{ reporte.prioridad }}</td>
 
-                            <td>
+            <td>
 
-                                <span class="estado proceso">
-                                    En proceso
-                                </span>
+              <a
+    href="/ver_reporte/{{ reporte.id }}"
+    class="btn btn-ver btn-sm"
+>
 
-                            </td>
+    <i class="bi bi-eye"></i>
+    Ver
 
-                            <td>Media</td>
+</a>
 
-                            <td>
+              <a
+    href="/actualizar_estado/{{ reporte.id }}"
+    class="btn btn-actualizar btn-sm"
+>
+     <i class="bi bi-eye"></i>
+    actualizar
+</a>
 
-                                <button class="btn btn-ver btn-sm">
-                                    <i class="bi bi-eye"></i>
-                                    Ver
-                                </button>
+            </td>
 
-                                <button class="btn btn-actualizar btn-sm">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    Actualizar
-                                </button>
+        </tr>
 
-                            </td>
+    {% endfor %}
 
-                        </tr>
+    </tbody>
 
-                        <tr>
-
-                            <td>3</td>
-                            <td>Lámpara dañada</td>
-                            <td>Luz</td>
-                            <td>Carlos Ruiz</td>
-                            <td>10/05/2026</td>
-
-                            <td>
-
-                                <span class="estado resuelto">
-                                    Resuelto
-                                </span>
-
-                            </td>
-
-                            <td>Baja</td>
-
-                            <td>
-
-                                <button class="btn btn-ver btn-sm">
-                                    <i class="bi bi-eye"></i>
-                                    Ver
-                                </button>
-
-                                <button class="btn btn-actualizar btn-sm">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    Actualizar
-                                </button>
-
-                            </td>
-
-                        </tr>
+</table>
 
                     </tbody>
 
