@@ -39,6 +39,17 @@
         <p class="mb-0">Administración de dependencias del sistema</p>
     </div>
 
+    <!-- ✅ MENSAJES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <!-- FORMULARIO -->
     <div class="card shadow-lg mb-4">
         <div class="card-header bg-primary text-white">
@@ -46,23 +57,25 @@
         </div>
 
         <div class="card-body">
-
             <form method="POST" action="/dependencias">
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Nombre</label>
-                        <input type="text" name="nombre" class="form-control" required>
+                        <input type="text" name="nombre" class="form-control"
+                               required minlength="3">
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Zona</label>
-                        <input type="text" name="zona" class="form-control" required>
+                        <input type="text" name="zona" class="form-control"
+                               required minlength="3">
                     </div>
 
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Tipo de servicio</label>
-                        <input type="text" name="tipo_servicio" class="form-control" required>
+                        <input type="text" name="tipo_servicio" class="form-control"
+                               required minlength="3">
                     </div>
                 </div>
 
@@ -71,7 +84,6 @@
                 </button>
 
             </form>
-
         </div>
     </div>
 
@@ -81,7 +93,7 @@
             Lista de dependencias
         </div>
 
-        <div class="card-body table-responsive">
+        <div class="card-body table-responsive" style="max-height: 400px; overflow-y: auto;">
 
             <table class="table table-bordered table-striped text-center">
 
@@ -97,6 +109,7 @@
 
                 <tbody>
                     {% for dep in dependencias %}
+
                     <tr>
                         <td>{{ dep.id_dependencia }}</td>
                         <td>{{ dep.nombre }}</td>
@@ -104,6 +117,14 @@
                         <td>{{ dep.tipo_servicio }}</td>
                         <td>
 
+                            <!-- ✅ BOTÓN EDITAR -->
+                            <button class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEditar{{ dep.id_dependencia }}">
+                                Editar
+                            </button>
+
+                            <!-- ✅ ELIMINAR -->
                             <a href="/eliminar_dependencia/{{ dep.id_dependencia }}"
                                class="btn btn-danger btn-sm">
                                 Eliminar
@@ -111,6 +132,59 @@
 
                         </td>
                     </tr>
+
+                    <!-- ✅ MODAL -->
+                    <div class="modal fade" id="modalEditar{{ dep.id_dependencia }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5>Editar dependencia</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <form action="/editar_dependencia/{{ dep.id_dependencia }}" method="POST">
+
+                                    <div class="modal-body">
+
+                                        <div class="mb-3">
+                                            <label>Nombre</label>
+                                            <input type="text" name="nombre"
+                                                   class="form-control"
+                                                   value="{{ dep.nombre }}"
+                                                   required minlength="3">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label>Zona</label>
+                                            <input type="text" name="zona"
+                                                   class="form-control"
+                                                   value="{{ dep.zona }}"
+                                                   required minlength="3">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label>Tipo de servicio</label>
+                                            <input type="text" name="tipo_servicio"
+                                                   class="form-control"
+                                                   value="{{ dep.tipo_servicio }}"
+                                                   required minlength="3">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">
+                                            Guardar cambios
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
                     {% endfor %}
                 </tbody>
 
@@ -120,6 +194,8 @@
     </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

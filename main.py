@@ -6,6 +6,7 @@ from firebase_config import db
 # =====================================
 
 from modulos.usuarios import usuarios_bp
+from modulos.dependencias import dependencias_bp
 from modulos.historial import historial_bp
 from modulos.categorias import categorias_bp
 from modulos.estados import estados_bp
@@ -36,6 +37,7 @@ app.register_blueprint(categorias_bp)
 app.register_blueprint(historial_bp)
 app.register_blueprint(estados_bp)
 app.register_blueprint(imagenes_bp)
+app.register_blueprint(dependencias_bp)
 app.register_blueprint(auditoria_bp)
 app.register_blueprint(reportes_bp)
 # =====================================
@@ -102,9 +104,9 @@ def comentarios():
 def votos():
     return render_template("votos.html")
 
-@app.route("/dependencias")
-def dependencias():
-    return render_template("dependencias.html")
+#@app.route("/dependencias")
+#def dependencias():
+#    return render_template("dependencias.html")
 
 @app.route("/asignaciones")
 def asignaciones():
