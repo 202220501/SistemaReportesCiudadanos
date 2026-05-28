@@ -17,6 +17,10 @@ from modulos.imagenes import (
 from modulos.auditoria import auditoria_bp
 from modulos.reportes import reportes_bp
 from modulos.gestiondisp import gestiondisp_bp
+
+# 1. IMPORTAMOS TU MÓDULO AQUÍ
+from modulos.admin import admin_bp
+
 # =====================================
 # APP
 # =====================================
@@ -42,6 +46,10 @@ app.register_blueprint(dependencias_bp)
 app.register_blueprint(auditoria_bp)
 app.register_blueprint(reportes_bp)
 app.register_blueprint(gestiondisp_bp)
+
+# 2. REGISTRAMOS TU MÓDULO AQUÍ
+app.register_blueprint(admin_bp)
+
 # =====================================
 # RUTAS
 # =====================================
@@ -114,15 +122,14 @@ def votos():
 def asignaciones():
     return render_template("asignaciones.html")
 
-@app.route("/admin")
-def admin():
-    return render_template("admin.html")
+# 3. SILENCIAMOS ESTA RUTA PARA QUE NO CHOQUE CON TU ARCHIVO admin.py
+# @app.route("/admin")
+# def admin():
+#     return render_template("admin.html")
 
 @app.route("/auditoria")
 def auditoria():
     return render_template("auditoria.html")
-
-
 
 # =====================================
 # EJECUTAR
