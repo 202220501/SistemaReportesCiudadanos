@@ -2,15 +2,20 @@ from flask import (
     Blueprint,
     request,
     redirect,
-    flash
+    flash,
+    render_template
 )
 
+# Importa Firestore de Firebase
 from firebase_admin import firestore
 
+# Importa manejo de fechas
 from datetime import datetime
 
+# Importa función para registrar auditoría
 from modulos.auditoria import registrar_evento
 
+# Importa librería para manejo de carpetas/rutas
 import os
 
 # =====================================
@@ -39,6 +44,60 @@ if not os.path.exists(CARPETA):
     os.makedirs(CARPETA)
 
 # =====================================
+# MOSTRAR PAGINA
+# =====================================
+
+@imagenes_bp.route(
+    "/imagenes",
+    methods=["GET", "POST"]
+)
+
+def imagenes():
+
+    # =====================================
+    # SI ES POST SUBE IMAGENES
+    # =====================================
+
+    if request.method == "POST":
+
+        return procesar_imagenes()
+
+    # =====================================
+    # LISTA EVIDENCIAS
+    # =====================================
+
+    lista_evidencias = []
+
+    try:
+
+        evidencias = db.collection(
+            "evidencias"
+        ).stream()
+
+        for evidencia in evidencias:
+
+            datos = evidencia.to_dict()
+
+            lista_evidencias.append(
+                datos
+            )
+
+    except Exception as e:
+
+        print(
+            "Error:",
+            e
+        )
+
+    return render_template(
+
+        "imagenes.html",
+
+        evidencias=lista_evidencias
+
+    )
+
+# =====================================
 # SUBIR IMAGENES
 # =====================================
 
@@ -50,6 +109,10 @@ def procesar_imagenes():
             "imagenes"
         )
 
+        # =====================================
+        # VALIDAR
+        # =====================================
+
         if len(archivos) == 0:
 
             flash(
@@ -60,6 +123,10 @@ def procesar_imagenes():
             return redirect("/imagenes")
 
         cantidad = 0
+
+        # =====================================
+        # RECORRER ARCHIVOS
+        # =====================================
 
         for archivo in archivos:
 
@@ -82,7 +149,9 @@ def procesar_imagenes():
             # GUARDAR LOCAL
             # =====================================
 
-            archivo.save(ruta_local)
+            archivo.save(
+                ruta_local
+            )
 
             # =====================================
             # URL LOCAL
@@ -110,42 +179,64 @@ def procesar_imagenes():
 
             datos = {
 
-                "reporte_id": reporte_id,
+                "reporte_id":
+                reporte_id,
 
-                "url": url,
+                "nombre":
+                nombre,
 
-                "fecha": fecha_actual
+                "url":
+                url,
+
+                "fecha":
+                fecha_actual
 
             }
 
-            referencia.set(datos)
+            referencia.set(
+                datos
+            )
+
             # =====================================
             # AUDITORIA
             # =====================================
 
             registrar_evento(
 
-            nombre,
+                nombre,
 
-            "SUBIR_IMAGEN",
+                "SUBIR_IMAGEN",
 
-            "imagenes",
+                "imagenes",
 
-            "Se subió la imagen"
+                "Se subió la imagen"
+
             )
-            
+
             cantidad += 1
 
+        # =====================================
+        # MENSAJE
+        # =====================================
+
         flash(
+
             f"{cantidad} imagen(es) subida(s) correctamente",
+
             "success"
+
         )
 
     except Exception as e:
 
         flash(
+
             f"Error: {str(e)}",
+
             "danger"
+
         )
 
-    return redirect("/imagenes")
+    return redirect(
+        "/imagenes"
+    )
