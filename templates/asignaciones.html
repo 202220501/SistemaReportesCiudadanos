@@ -4,65 +4,51 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Asignación de Reportes</title>
+    <title>
+        Asignación de Reportes
+    </title>
 
     <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- ICONOS -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
 
         body{
             background-color: #eef2f7;
-            font-family: Arial, Helvetica, sans-serif;
         }
 
         .header{
             background-color: #0f172a;
             color: white;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
-        }
-
-        .header h1{
-            margin: 0;
+            padding: 20px;
+            border-radius: 10px;
         }
 
         .card{
-            border: none;
             border-radius: 15px;
         }
 
         .estado{
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 20px;
             color: white;
             font-size: 13px;
             font-weight: bold;
         }
 
-        .pendiente{
-            background-color: #ffc107;
-            color: black;
-        }
-
         .asignado{
             background-color: #198754;
         }
 
-        .btn-asignar{
-            background-color: #0d6efd;
-            color: white;
-        }
-
-        .btn-asignar:hover{
-            background-color: #0b5ed7;
-            color: white;
+        .pendiente{
+            background-color: #ffc107;
+            color: black;
         }
 
     </style>
@@ -71,301 +57,180 @@
 
 <body>
 
+<div class="container mt-4">
+
     <!-- HEADER -->
 
-    <div class="header">
+    <div class="header mb-4">
 
-        <div class="container">
+        <h3>
 
-            <h1>
-                <i class="bi bi-clipboard-check"></i>
-                Asignación de Reportes
-            </h1>
+            <i class="bi bi-diagram-3"></i>
+            Asignación de Reportes
 
-            <p>
-                Gestión y asignación de reportes ciudadanos a administradores.
-            </p>
+        </h3>
+
+        <p class="mb-0">
+
+            Asignación de reportes ciudadanos a dependencias.
+
+        </p>
+
+    </div>
+
+    <!-- MENSAJES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- TABLA -->
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-dark text-white">
+
+            Lista de Reportes
+
+        </div>
+
+        <div class="card-body table-responsive">
+
+            <table class="table table-bordered table-hover text-center">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Titulo</th>
+                        <th>Categoria</th>
+                        <th>Dependencia</th>
+                        <th>Estado</th>
+                        <th>Asignar</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for reporte in reportes %}
+
+                    <tr>
+
+                        <td>
+                            {{ reporte.id_reporte }}
+                        </td>
+
+                        <td>
+                            {{ reporte.titulo }}
+                        </td>
+
+                        <td>
+                            {{ reporte.categoria_id }}
+                        </td>
+
+                        <td>
+
+                            {% if reporte.dependencia_asignada %}
+
+                                {{ reporte.dependencia_asignada }}
+
+                            {% else %}
+
+                                Sin asignar
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if reporte.estado_asignacion == "Asignado" %}
+
+                                <span class="estado asignado">
+                                    Asignado
+                                </span>
+
+                            {% else %}
+
+                                <span class="estado pendiente">
+                                    Pendiente
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <form 
+                                method="POST"
+                                action="/asignar_reporte/{{ reporte.id_reporte }}"
+                            >
+
+                                <div class="d-flex gap-2">
+
+                                    <select 
+                                        name="dependencia"
+                                        class="form-select"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Seleccionar
+                                        </option>
+
+                                        {% for dep in dependencias %}
+
+                                        <option value="{{ dep.nombre }}">
+
+                                            {{ dep.nombre }}
+
+                                        </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                    <button 
+                                        type="submit"
+                                        class="btn btn-primary"
+                                    >
+
+                                        <i class="bi bi-check-circle"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
 
         </div>
 
     </div>
 
-    <!-- CONTENIDO -->
-
-    <div class="container">
-
-        <!-- CARDS -->
-
-        <div class="row mb-4">
-
-            <div class="col-md-4 mb-3">
-
-                <div class="card shadow-lg p-4">
-
-                    <h2 class="text-primary">120</h2>
-
-                    <p>
-                        Reportes Registrados
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-4 mb-3">
-
-                <div class="card shadow-lg p-4">
-
-                    <h2 class="text-success" id="contadorAsignados">87</h2>
-
-                    <p>
-                        Reportes Asignados
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-4 mb-3">
-
-                <div class="card shadow-lg p-4">
-
-                    <h2 class="text-warning" id="contadorPendientes">33</h2>
-
-                    <p>
-                        Pendientes
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- BUSCADOR -->
-
-        <div class="card shadow-lg p-4 mb-4">
-
-            <label class="form-label">
-                Buscar Reporte
-            </label>
-
-            <input 
-                type="text"
-                class="form-control"
-                placeholder="Ejemplo: Alumbrado, Baches, Agua..."
-            >
-
-        </div>
-
-        <!-- TABLA -->
-
-        <div class="card shadow-lg p-4">
-
-            <h4 class="mb-4">
-
-                <i class="bi bi-table"></i>
-                Lista de Reportes
-
-            </h4>
-
-            <div class="table-responsive">
-
-                <table class="table table-bordered table-hover">
-
-                    <thead class="table-dark">
-
-                        <tr>
-
-                            <th>ID</th>
-                            <th>Ciudadano</th>
-                            <th>Problema</th>
-                            <th>Zona</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Acción</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="tablaReportes">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SCRIPT -->
-
-    <script>
-
-    const ciudadanos = [
-        "Juan Pérez",
-        "María López",
-        "Carlos Ramírez",
-        "Ana Torres",
-        "Luis Hernández",
-        "Fernanda Cruz",
-        "Pedro Sánchez",
-        "Daniela Flores"
-    ];
-
-    const problemas = [
-        "Baches",
-        "Fuga de agua",
-        "Alumbrado público",
-        "Basura acumulada",
-        "Semáforo dañado",
-        "Cableado peligroso",
-        "Pavimento roto"
-    ];
-
-    const zonas = [
-        "Centro",
-        "Zona Norte",
-        "Zona Sur",
-        "Ecatepec",
-        "San Cristóbal",
-        "Las Américas"
-    ];
-
-    const tabla = document.getElementById("tablaReportes");
-
-    // CONTADORES
-
-    let asignados = 87;
-    let pendientes = 33;
-
-    const contadorAsignados = document.getElementById("contadorAsignados");
-    const contadorPendientes = document.getElementById("contadorPendientes");
-
-    // GENERAR FILAS
-
-    for(let i = 1; i <= 100; i++){
-
-        let ciudadano = ciudadanos[Math.floor(Math.random() * ciudadanos.length)];
-
-        let problema = problemas[Math.floor(Math.random() * problemas.length)];
-
-        let zona = zonas[Math.floor(Math.random() * zonas.length)];
-
-        let asignado = Math.random() > 0.4;
-
-        let estadoTexto = asignado ? "Asignado" : "Pendiente";
-
-        let estadoClase = asignado ? "asignado" : "pendiente";
-
-        let fila = `
-
-        <tr>
-
-            <td>${i}</td>
-            <td>${ciudadano}</td>
-            <td>${problema}</td>
-            <td>${zona}</td>
-            <td>27/05/2026</td>
-
-            <td>
-
-                <span class="estado ${estadoClase}">
-                    ${estadoTexto}
-                </span>
-
-            </td>
-
-            <td>
-
-                <button class="btn btn-asignar btn-sm">
-
-                    <i class="bi bi-person-check"></i>
-                    Asignar
-
-                </button>
-
-            </td>
-
-        </tr>
-
-        `;
-
-        tabla.innerHTML += fila;
-
-    }
-
-    // BOTON ASIGNAR
-
-    document.addEventListener("click", function(e){
-
-        if(e.target.closest(".btn-asignar")){
-
-            let btn = e.target.closest(".btn-asignar");
-
-            let fila = btn.closest("tr");
-
-            let estado = fila.querySelector(".estado");
-
-            // VALIDAR SI YA ESTA ASIGNADO
-
-            if(estado.textContent.trim() !== "Asignado"){
-
-                estado.textContent = "Asignado";
-
-                estado.classList.remove("pendiente");
-
-                estado.classList.add("asignado");
-
-                asignados++;
-                pendientes--;
-
-                contadorAsignados.textContent = asignados;
-                contadorPendientes.textContent = pendientes;
-
-                alert("Reporte asignado correctamente.");
-
-            }else{
-
-                alert("Este reporte ya estaba asignado.");
-
-            }
-
-        }
-
-    });
-
-    // BUSCADOR
-
-    const buscador = document.querySelector("input");
-
-    buscador.addEventListener("keyup", function(){
-
-        let texto = buscador.value.toLowerCase();
-
-        document.querySelectorAll("tbody tr").forEach(function(fila){
-
-            let contenido = fila.textContent.toLowerCase();
-
-            if(contenido.includes(texto)){
-
-                fila.style.display = "";
-
-            }else{
-
-                fila.style.display = "none";
-
-            }
-
-        });
-
-    });
-
-</script>
+</div>
 
 </body>
 
-</html> 
+</html>
