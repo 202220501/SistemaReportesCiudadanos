@@ -117,16 +117,6 @@
             color: white;
         }
 
-        .btn-actualizar{
-            background-color: #198754;
-            color: white;
-        }
-
-        .btn-actualizar:hover{
-            background-color: #157347;
-            color: white;
-        }
-
         /* FILTROS */
 
         .filtro-card{
@@ -153,33 +143,21 @@
 
             </h1>
 
-             <p class="mb-0">
+            <p class="mb-0">
 
-            Monitoreo y seguimiento del estado actual de los reportes ciudadanos.
+                Historial y monitoreo de reportes ciudadanos.
 
-        </p>
+            </p>
 
-    </div>
-
-    <a href="/"
-       class="btn btn-outline-light">
-
-        <i class="bi bi-house-door-fill"></i>
-        Volver al Menú Principal
-
-    </a>
+        </div>
 
     </div>
-
-    <div class="container mt-3">
-
-</div>
 
     <!-- CONTENIDO -->
 
     <div class="container">
 
-        <!-- CARDS RESUMEN -->
+        <!-- CARDS -->
 
         <div class="row mb-4">
 
@@ -381,7 +359,7 @@
             <h4 class="titulo-seccion">
 
                 <i class="bi bi-table"></i>
-                Estado Actual de Reportes
+                Historial de Reportes
 
             </h4>
 
@@ -399,6 +377,8 @@
                             <th>Ciudadano</th>
                             <th>Fecha</th>
                             <th>Estado</th>
+                            <th>Dependencia</th>
+                            <th>Asignación</th>
                             <th>Prioridad</th>
                             <th>Acciones</th>
 
@@ -432,7 +412,35 @@
 
                             </td>
 
-                            <td>{{ reporte.prioridad }}</td>
+                            <td>
+
+                                {{ reporte.dependencia_asignada }}
+
+                            </td>
+
+                            <td>
+
+                                {% if reporte.estado_asignacion == "Asignado" %}
+
+                                    <span class="estado resuelto">
+                                        Asignado
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="estado pendiente">
+                                        Pendiente
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {{ reporte.prioridad }}
+
+                            </td>
 
                             <td>
 
@@ -443,16 +451,6 @@
 
                                     <i class="bi bi-eye"></i>
                                     Ver
-
-                                </a>
-
-                                <a
-                                    href="/actualizar_estado/{{ reporte.id }}"
-                                    class="btn btn-actualizar btn-sm"
-                                >
-
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    Actualizar
 
                                 </a>
 

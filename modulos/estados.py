@@ -2,7 +2,7 @@
 # MODULO ESTADOS
 # =========================================
 
-from flask import Blueprint, render_template, redirect, request
+from flask import Blueprint, render_template, request
 from firebase_config import db
 
 # =========================================
@@ -27,10 +27,6 @@ def estados():
     proceso = 0
     resueltos = 0
     cancelados = 0
-
-    # =========================================
-    # FILTROS
-    # =========================================
 
     buscar = request.args.get(
         "buscar",
@@ -72,7 +68,7 @@ def estados():
             )
 
             # =========================================
-            # FILTRO BUSQUEDA
+            # BUSQUEDA
             # =========================================
 
             if buscar != "":
@@ -121,6 +117,20 @@ def estados():
 
                 datos["estado"] = "Desconocido"
                 datos["clase_estado"] = "secondary"
+
+            # =========================================
+            # ASIGNACION
+            # =========================================
+
+            datos["dependencia_asignada"] = datos.get(
+                "dependencia_asignada",
+                "Sin asignar"
+            )
+
+            datos["estado_asignacion"] = datos.get(
+                "estado_asignacion",
+                "Pendiente"
+            )
 
             # =========================================
             # FILTRO ESTADO
@@ -188,53 +198,6 @@ def ver_reporte(id):
             )
 
         return "Reporte no encontrado"
-
-    except Exception as e:
-
-        return str(e)
-
-# =========================================
-# ACTUALIZAR ESTADO
-# =========================================
-
-@estados_bp.route("/actualizar_estado/<id>")
-def actualizar_estado(id):
-
-    try:
-
-        reporte_ref = db.collection(
-            "reportes"
-        ).document(id)
-
-        reporte = reporte_ref.get()
-
-        if reporte.exists:
-
-            datos = reporte.to_dict()
-
-            estado_actual = datos.get(
-                "estado_id",
-                "1"
-            )
-
-            nuevo_estado = "1"
-
-            if estado_actual == "1":
-                nuevo_estado = "2"
-
-            elif estado_actual == "2":
-                nuevo_estado = "3"
-
-            elif estado_actual == "3":
-                nuevo_estado = "4"
-
-            reporte_ref.update({
-
-                "estado_id": nuevo_estado
-
-            })
-
-        return redirect("/estados")
 
     except Exception as e:
 
