@@ -16,6 +16,7 @@ from modulos.imagenes import (
 )
 from modulos.auditoria import auditoria_bp
 from modulos.reportes import reportes_bp
+from modulos.gestiondisp import gestiondisp_bp
 # =====================================
 # APP
 # =====================================
@@ -40,6 +41,7 @@ app.register_blueprint(imagenes_bp)
 app.register_blueprint(dependencias_bp)
 app.register_blueprint(auditoria_bp)
 app.register_blueprint(reportes_bp)
+app.register_blueprint(gestiondisp_bp)
 # =====================================
 # RUTAS
 # =====================================
@@ -120,9 +122,7 @@ def admin():
 def auditoria():
     return render_template("auditoria.html")
 
-@app.route("/gestiondisp")
-def gestiondisp():
-    return render_template("gestiondisp.html")
+
 
 # =====================================
 # EJECUTAR
